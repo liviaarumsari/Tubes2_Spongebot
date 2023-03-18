@@ -12,8 +12,8 @@
       }
     ],
     "additionalProbingPaths": [
-      "C:\\Users\\livia\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\livia\\.nuget\\packages"
+      "C:\\Users\\Rinaldy Adin\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Rinaldy Adin\\.nuget\\packages"
     ],
     "configProperties": {
       "Microsoft.NETCore.DotNetHostPolicy.SetAppPaths": true
