@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\livia\OneDrive - Institut Teknologi Bandung\IF\SEM 4\stima\Tubes 02\Spongebot\obj\Debug\net6.0-windows\
+C:\Users\livia\OneDrive - Institut Teknologi Bandung\IF\SEM 4\stima\Tubes 02\src\Spongebot\obj\Debug\net6.0-windows\
 Spongebot
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Users\livia\OneDrive - Institut Teknologi Bandung\IF\SEM 4\stima\Tubes 02\Spongebot\App.xaml
+C:\Users\livia\OneDrive - Institut Teknologi Bandung\IF\SEM 4\stima\Tubes 02\src\Spongebot\App.xaml
 11407045341
 
 5847445936
 194101785492
 MainWindow.xaml;
 
-False
+True
 

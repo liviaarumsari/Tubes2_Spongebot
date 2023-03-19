@@ -4,6 +4,39 @@
              xmlns:local="clr-namespace:Spongebot"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="WinAll" TargetType="{x:Type Window}">
+            <Setter Property="FontFamily"
+                Value="/Fonts/#Lato-Regular" />
+            <Setter Property="FontSize"
+                Value="16" />
+            <Setter Property="Foreground"
+                    Value="#3A3A3A" />
+        </Style>
+        <Style TargetType="{x:Type StackPanel}" x:Key="StackPanelCardTemplate">
+            <Setter Property="Margin" Value="24"/>
+            <Setter Property="Background" Value="#FDFEF3"/>
+        </Style>
+        <Style TargetType="{x:Type Border}" x:Key="BorderCardStyle">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="#FDFEF3"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="3" BlurRadius="8" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate TargetType="Button" x:Key="ButtonTemplate">
+            <Border CornerRadius="4"
+                            Background="#F88BBC" 
+                            Padding="16, 4"
+                            BorderThickness="1">
+                <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            
+                            Margin="{TemplateBinding Padding}" ></ContentPresenter>
+            </Border>
+        </ControlTemplate>
     </Application.Resources>
 </Application>

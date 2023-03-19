@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\Spongebot"
   ],
+  "SelectedNode": "\\src\\Spongebot\\MainWindow.xaml",
   "PreviewInSolutionExplorer": false
 }

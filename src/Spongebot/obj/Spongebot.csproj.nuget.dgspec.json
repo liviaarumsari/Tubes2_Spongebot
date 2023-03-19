@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\Spongebot\\Spongebot.csproj": {}
+    "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\src\\Spongebot\\Spongebot.csproj": {}
   },
   "projects": {
-    "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\Spongebot\\Spongebot.csproj": {
+    "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\src\\Spongebot\\Spongebot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\Spongebot\\Spongebot.csproj",
+        "projectUniqueName": "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\src\\Spongebot\\Spongebot.csproj",
         "projectName": "Spongebot",
-        "projectPath": "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\Spongebot\\Spongebot.csproj",
+        "projectPath": "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\src\\Spongebot\\Spongebot.csproj",
         "packagesPath": "C:\\Users\\livia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\Spongebot\\obj\\",
+        "outputPath": "C:\\Users\\livia\\OneDrive - Institut Teknologi Bandung\\IF\\SEM 4\\stima\\Tubes 02\\src\\Spongebot\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\livia\\AppData\\Roaming\\NuGet\\NuGet.Config",
