@@ -49,6 +49,7 @@ namespace Spongebot.Algorithms
         public void run()
         {
             BFSPath initialPath = new BFSPath(startCell);
+            pathQ.Enqueue(initialPath);
 
             while (pathQ.Count != 0)
             {
