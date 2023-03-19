@@ -43,14 +43,14 @@ class FileIO
 
         cells = new Cell[rows, cols];
 
-        for (int r = 0; r < rows; r++)
+        for (int y = 0; y < rows; y++)
         {
             int colsInLine = 0;
-            string[] codes = lines[r].Split(' ');
+            string[] codes = lines[y].Split(' ');
 
-            for (int c = 0; c < cols; c++)
+            for (int x = 0; x < cols; x++)
             {
-                string code = codes[c].ToLower();
+                string code = codes[x].ToLower();
 
                 if (code.Length == 0)
                     continue;
@@ -59,7 +59,7 @@ class FileIO
 
                 try
                 {
-                    cells[r, c] = new Cell(cellCodes[code]);
+                    cells[x, y] = new Cell(x, y, cellCodes[code]);
                 }
                 catch (KeyNotFoundException)
                 {

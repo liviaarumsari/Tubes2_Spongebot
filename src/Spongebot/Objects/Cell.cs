@@ -3,13 +3,13 @@ namespace Spongebot.Objects;
 
 class Cell
 {
-    public bool Visited { get; set; }
     public CellType Type { get; }
+    public Point Position { get; }
 
-    public Cell(CellType _Type)
+    public Cell(int x, int y, CellType _Type)
     {
-        this.Visited = false;
         this.Type = _Type;
+        Position = new Point(x, y);
     }
 
     public string toString()
@@ -17,7 +17,7 @@ class Cell
         if (Type == CellType.Start)
         {
             return "K";
-        } 
+        }
         else if (Type == CellType.Empty)
         {
             return "R";

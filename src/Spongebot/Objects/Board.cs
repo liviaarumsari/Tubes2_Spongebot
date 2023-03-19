@@ -5,32 +5,47 @@ namespace Spongebot.Objects;
 
 class Board
 {
-    private Cell[,] cells;
+    public Cell[,] Cells { get; }
 
     public Board(Cell[,] _cells)
     {
-        cells = new Cell[_cells.GetLength(0), _cells.GetLength(1)];
-        for (int r = 0; r < _cells.GetLength(0); r++)
+        Cells = new Cell[_cells.GetLength(0), _cells.GetLength(1)];
+        for (int y = 0; y < _cells.GetLength(1); y++)
         {
-            for (int c = 0; c < _cells.GetLength(1); c++)
+            for (int x = 0; x < _cells.GetLength(0); x++)
             {
-                cells[r,c] = _cells[r,c];
+                Cells[x,y] = _cells[x,y];
             }
         }
     }
 
-    public Board(Board other) : this(other.cells) { }
+    public Board(Board other) : this(other.Cells) { }
 
     public void print()
     {
-        for (int r = 0; r < cells.GetLength(0); r++)
+        for (int y = 0; y < Cells.GetLength(1); y++)
         {
-            for (int c = 0; c < cells.GetLength(1); c++)
+            for (int x = 0; x < Cells.GetLength(0); x++)
             {
-                Debug.Write(cells[r, c].toString() + " ");
+                Debug.Write(Cells[x, y].toString() + " ");
             }
             Debug.WriteLine("");
         }
         Debug.WriteLine("");
+    }
+
+    public bool isValidPosition(int x, int y)
+    {
+        return x < Cells.GetLength(0) && x >= 0 && y < Cells.GetLength(1) && y >= 0;
+    }
+
+    public bool isValidPosition(Point p)
+    {
+        return isValidPosition(p.X, p.Y);
+    }
+
+    public Cell this[Point p]
+    {
+        get { return Cells[p.X, p.Y]; }
     }
 }
