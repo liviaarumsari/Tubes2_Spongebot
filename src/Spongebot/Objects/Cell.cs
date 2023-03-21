@@ -1,14 +1,34 @@
 using Spongebot.Enums;
+using System.ComponentModel;
 using System.Windows.Media;
 
 namespace Spongebot.Objects;
 
-class Cell
+class Cell : INotifyPropertyChanged
 {
     public CellType Type { get; }
     public Point Position { get; }
 
-    public Brush CellBackground { get; set; }
+    private Brush cellBackground;
+    public Brush CellBackground
+    {
+        get { return cellBackground; }
+        set
+        {
+            if (value != cellBackground)
+            {
+                cellBackground = value;
+                OnPropertyChanged(nameof(CellBackground));
+            }
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
     public Cell(int x, int y, CellType _Type)
     {
@@ -16,11 +36,13 @@ class Cell
         Position = new Point(x, y);
         if (this.Type == CellType.Wall)
         {
+            cellBackground = Brushes.Black;
             CellBackground = Brushes.Black;
         }
         else
         {
-            CellBackground = Brushes.Transparent;
+            cellBackground = Brushes.White;
+            CellBackground = Brushes.White;
         }
     }
 
