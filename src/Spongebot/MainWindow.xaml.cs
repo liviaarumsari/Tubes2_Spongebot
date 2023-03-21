@@ -43,49 +43,111 @@ namespace Spongebot
 
             // draw the board
             DrawBoard();
-            dataGridBoard.Items.Refresh();
         }
 
         private void DrawBoard()
         {
-            DataTable boardData = new DataTable();
-            //dataGridBoard.Width = 300;
+            // clear the grid
+            MainGrid.Children.Clear();
+            MainGrid.RowDefinitions.Clear();
+            MainGrid.ColumnDefinitions.Clear();
 
-
+            // add rows and columns to the grid
+            for (int y = 0; y < board.Cells.GetLength(0); y++)
+            {
+                RowDefinition gridRow = new RowDefinition();
+                gridRow.Height = new GridLength(45);
+                MainGrid.RowDefinitions.Add(gridRow);
+            }
             for (int x = 0; x < board.Cells.GetLength(1); x++)
             {
-                boardData.Columns.Add(new DataColumn("Column" + x, typeof(Cell)));
+                ColumnDefinition gridCol = new ColumnDefinition();
+                gridCol.Width = new GridLength(45);
+                MainGrid.ColumnDefinitions.Add(gridCol);
             }
 
-            for (int i = 0; i < board.Cells.GetLength(0); i++)
+            // add cells to the grid
+            for (int y = 0; y < board.Cells.GetLength(1); y++)
             {
-                DataRow row = boardData.NewRow();
-                for (int j = 0; j < board.Cells.GetLength(1); j++)
+                for (int x = 0; x < board.Cells.GetLength(0); x++)
                 {
-                    //CellType tes = board.Cells[i, j].Type;
-                    //if (tes == CellType.Wall)
-                    //{
-                    //    row[j] = "XXX";
-                    //}
-                    //else if (tes == CellType.Start)
-                    //{
-                    //    row[j] = "Start";
-                    //}
-                    //else if (tes == CellType.Empty)
-                    //{
-                    //    row[j] = "";
-                    //}
-                    //else
-                    //{
-                    //    row[j] = "Treasure!";
-                    //}
-                    row[j] = board.Cells[i, j];
-                    dataGridBoard.Items.Refresh();
+                    Cell cell = board.Cells[x, y];
+                    Border border = new Border();
+                    if (cell.Type == CellType.Start)
+                    {
+                        TextBlock txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Start";
+                        txtBlock1.FontSize = 14;
+                        Grid.SetColumn(txtBlock1, x);
+                        Grid.SetRow(txtBlock1, y);
+                        border.Child = txtBlock1;
+                        border.Background = Brushes.AliceBlue;
+                    }
+                    else if (cell.Type == CellType.Treasure)
+                    {
+                        TextBlock txtBlock1 = new TextBlock();
+                        txtBlock1.Text = "Treasure";
+                        txtBlock1.FontSize = 14;
+                        Grid.SetColumn(txtBlock1, x);
+                        Grid.SetRow(txtBlock1, y);
+                        border.Child = txtBlock1;
+                        border.Background = Brushes.Orange;
+                    }
+                    else if (cell.Type == CellType.Empty)
+                    {
+                        border.Background = Brushes.White;
+                    }
+                    else
+                    {
+                        border.Background = Brushes.Black;
+                    }
+                    Grid.SetColumn(border, x);
+                    Grid.SetRow(border, y);
+                    MainGrid.Children.Add(border);
                 }
-                boardData.Rows.Add(row);
             }
-
-            dataGridBoard.DataContext = boardData;
         }
+
+        //private void DrawBoard()
+        //{
+        //    DataTable boardData = new DataTable();
+        //    //dataGridBoard.Width = 300;
+
+
+        //    for (int x = 0; x < board.Cells.GetLength(1); x++)
+        //    {
+        //        boardData.Columns.Add(new DataColumn("Column" + x, typeof(string)));
+        //    }
+
+        //    for (int i = 0; i < board.Cells.GetLength(0); i++)
+        //    {
+        //        DataRow row = boardData.NewRow();
+        //        for (int j = 0; j < board.Cells.GetLength(1); j++)
+        //        {
+        //            CellType tes = board.Cells[i, j].Type;
+        //            if (tes == CellType.Wall)
+        //            {
+        //                row[j] = "XXX";
+        //            }
+        //            else if (tes == CellType.Start)
+        //            {
+        //                row[j] = "Start";
+        //            }
+        //            else if (tes == CellType.Empty)
+        //            {
+        //                row[j] = "";
+        //            }
+        //            else
+        //            {
+        //                row[j] = "Treasure!";
+        //            }
+        //            //row[j] = board.Cells[i, j];
+        //            //dataGridBoard.Items.Refresh();
+        //        }
+        //        boardData.Rows.Add(row);
+        //    }
+
+        //    dataGridBoard.DataContext = boardData;
+        //}
     }
 }
