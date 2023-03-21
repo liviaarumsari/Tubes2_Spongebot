@@ -100,8 +100,16 @@
             <!-- Output column -->
             <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource StackPanelCardTemplate}" >
                 <!-- gridview of matrix as the output -->
-                <DataGrid Margin="0 5 0 10" Name="MatrixDataGrid" Background="#FFF" BorderThickness="1" BorderBrush="#AAA"/>
-
+                <DataGrid x:Name="dataGridBoard" ItemsSource="{Binding}" AutoGenerateColumns="True"
+                          Margin="10" Grid.Row="1"  Width="auto" HorizontalAlignment="Center" 
+                          HeadersVisibility="None" IsReadOnly="True" SelectionUnit="FullRow" BorderThickness="0,0,0,0" 
+                          GridLinesVisibility="None">
+                    <DataGrid.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding CellBackground}" />
+                        </Style>
+                    </DataGrid.CellStyle>
+                </DataGrid>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
