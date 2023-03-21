@@ -99,24 +99,6 @@
         <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource BorderCardStyle}">
             <!-- Output column -->
             <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource StackPanelCardTemplate}" >
-                <!-- gridview of matrix as the output -->
-                <!--<DataGrid x:Name="dataGridBoard" ItemsSource="{Binding}" AutoGenerateColumns="True"
-                          Margin="10" Grid.Row="1"  Width="auto" HorizontalAlignment="Center" 
-                          HeadersVisibility="None" IsReadOnly="True" SelectionUnit="FullRow" BorderThickness="0,0,0,0" 
-                          GridLinesVisibility="None">
-                    <DataGrid.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding}" Value="Start">
-                                    <Setter Property="Background" Value="Red"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding}" Value="XXX">
-                                    <Setter Property="Background" Value="Green"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.CellStyle>
-                </DataGrid>-->
                 <Grid x:Name="MainGrid" ></Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
