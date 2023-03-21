@@ -1,17 +1,17 @@
-﻿using Spongebot.Objects;
+using Spongebot.Objects;
 using Spongebot.Enums;
 using System.Collections.Generic;
 
 namespace Spongebot.Algorithms
 {
-    internal class BFS
+    internal class DFS
     {
         private Board board;
         private Cell startCell;
         private List<Cell> treasureCells = new List<Cell>();
-        private Queue<BFSPath> pathQ = new Queue<BFSPath>();
+        private Stack<DFSPath> pathS = new Stack<DFSPath>();
 
-        public BFS(Board board)
+        public DFS(Board board)
         {
             this.board = board;
 
@@ -36,7 +36,7 @@ namespace Spongebot.Algorithms
             }
         }
 
-        private bool cellIsVisited(Cell cell, BFSPath path)
+        private bool cellIsVisited(Cell cell, DFSPath path)
         {
             for (int i = 0; i < path.Length; i++)
             {
@@ -48,12 +48,12 @@ namespace Spongebot.Algorithms
 
         public void run()
         {
-            BFSPath initialPath = new BFSPath(startCell);
-            pathQ.Enqueue(initialPath);
+            DFSPath initialPath = new DFSPath(startCell);
+            pathS.Push(initialPath);
 
-            while (pathQ.Count != 0)
+            while (pathS.Count != 0)
             {
-                BFSPath currentPath = pathQ.Dequeue();
+                DFSPath currentPath = pathS.Pop();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
                 if (currentPath.treasureCount == treasureCells.Count)
@@ -75,7 +75,7 @@ namespace Spongebot.Algorithms
                     if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath))
                     {
                         Cell neighbor = board[neighborPosition];
-                        pathQ.Enqueue(new BFSPath(currentPath, neighbor));
+                        pathS.Push(new DFSPath(currentPath, neighbor));
                     }
                 }
             }
