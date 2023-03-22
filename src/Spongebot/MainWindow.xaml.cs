@@ -199,9 +199,14 @@ namespace Spongebot
         {
             if (board != null)
             {
-                DFS DFS = new DFS(board);
-                DFS.run();
+                BFS bfs = new BFS(board);
+                bfs.run();
             }
+            //if (board != null)
+            //{
+            //    DFS dfs = new DFS(board);
+            //    dfs.run();
+            //}
         }
     }
 }
