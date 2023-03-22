@@ -93,7 +93,7 @@
                     </StackPanel>
                 </Grid>
                 <!-- Visualize button -->
-                <Button Template="{StaticResource ButtonTemplate}" Name="VisualizeButton" Foreground="#FDFEF3" Margin="0 24" Content="Search treasure!" />
+                <Button Template="{StaticResource ButtonTemplate}" Click="VisualizeButton_Click" Name="VisualizeButton" Foreground="#FDFEF3" Margin="0 24" Content="Search treasure!" />
             </StackPanel>
         </Border>
 

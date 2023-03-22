@@ -6,7 +6,9 @@ namespace Spongebot.Objects
     internal class BFSPath
     {
         private Cell[] path;
-        public int Length { get; }
+        public int Length {
+            get { return path.Length; }
+        }
         public int treasureCount { get; }
 
         public BFSPath(params Cell[] cells)

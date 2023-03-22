@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Spongebot.Algorithms;
 using Spongebot.Enums;
 using Spongebot.Exceptions;
 using Spongebot.IO;
@@ -8,6 +9,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -18,7 +20,7 @@ namespace Spongebot
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private Board board;
+        private Board? board;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -36,10 +38,33 @@ namespace Spongebot
             }
         }
 
+        private string chosenFileName;
+        public string ChosenFileName
+        {
+            get
+            {
+                return chosenFileName;
+            }
+            set
+            {
+                chosenFileName = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChosenFileName"));
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
+
+            string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string deafultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\board1.txt"));
+
+            FileIO configFile = new FileIO(deafultPath);
+            board = configFile.readBoardFromFile();
+
+            // draw the board
+            DrawBoard();
         }
 
         private void ChooseFileButton_Click(object sender, RoutedEventArgs e)
@@ -59,6 +84,7 @@ namespace Spongebot
                 try
                 {
                     FileIO configFile = new FileIO(fileDialog.FileName, fileDialog.SafeFileName);
+                    ChosenFileName = fileDialog.SafeFileName;
                     board = configFile.readBoardFromFile();
 
                     // draw the board
@@ -166,6 +192,15 @@ namespace Spongebot
                     Grid.SetRow(border, y);
                     MainGrid.Children.Add(border);
                 }
+            }
+        }
+
+        private void VisualizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (board != null)
+            {
+                BFS bfs = new BFS(board);
+                bfs.run();
             }
         }
     }

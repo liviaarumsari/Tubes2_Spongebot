@@ -1,6 +1,10 @@
 ﻿using Spongebot.Objects;
 using Spongebot.Enums;
 using System.Collections.Generic;
+using System.Windows.Media;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System;
 
 namespace Spongebot.Algorithms
 {
@@ -41,12 +45,12 @@ namespace Spongebot.Algorithms
             for (int i = 0; i < path.Length; i++)
             {
                 if (cell == path[i])
-                    return false;
+                    return true;
             }
-            return true;
+            return false;
         }
 
-        public void run()
+        public async void run()
         {
             BFSPath initialPath = new BFSPath(startCell);
             pathQ.Enqueue(initialPath);
@@ -58,7 +62,11 @@ namespace Spongebot.Algorithms
 
                 if (currentPath.treasureCount == treasureCells.Count)
                 {
-                    // Found
+                    for (int i = 0; i < currentPath.Length; i++)
+                    {
+                        currentPath[i].CellBackground = Brushes.Green;
+                        await Task.Delay(TimeSpan.FromMilliseconds(500));
+                    }
                     return;
                 }
 
@@ -72,7 +80,7 @@ namespace Spongebot.Algorithms
 
                 foreach (var neighborPosition in neighborPositions)
                 {
-                    if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath))
+                    if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
                     {
                         Cell neighbor = board[neighborPosition];
                         pathQ.Enqueue(new BFSPath(currentPath, neighbor));
