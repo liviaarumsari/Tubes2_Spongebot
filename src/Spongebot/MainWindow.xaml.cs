@@ -58,7 +58,7 @@ namespace Spongebot
             DataContext = this;
 
             string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string deafultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\board1.txt"));
+            string deafultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\board2.txt"));
 
             FileIO configFile = new FileIO(deafultPath);
             board = configFile.readBoardFromFile();
@@ -144,13 +144,13 @@ namespace Spongebot
             var gridLen = n_column > n_row ? 400/n_column : 400/n_row;
 
             // add rows and columns to the grid
-            for (int y = 0; y < n_column; y++)
+            for (int y = 0; y < n_row; y++)
             {
                 RowDefinition gridRow = new RowDefinition();
                 gridRow.Height = new GridLength(gridLen);
                 MainGrid.RowDefinitions.Add(gridRow);
             }
-            for (int x = 0; x < n_row; x++)
+            for (int x = 0; x < n_column; x++)
             {
                 ColumnDefinition gridCol = new ColumnDefinition();
                 gridCol.Width = new GridLength(gridLen);
