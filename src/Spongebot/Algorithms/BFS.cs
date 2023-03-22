@@ -64,7 +64,15 @@ namespace Spongebot.Algorithms
                 {
                     for (int i = 0; i < currentPath.Length; i++)
                     {
-                        currentPath[i].CellBackground = Brushes.Green;
+                        if (currentPath[i].CellBackground == Brushes.Green)
+                        {
+
+                            currentPath[i].CellBackground = Brushes.DarkGreen;
+                        }
+                        else
+                        {
+                            currentPath[i].CellBackground = Brushes.Green;
+                        }
                         await Task.Delay(TimeSpan.FromMilliseconds(500));
                     }
                     return;
@@ -72,19 +80,30 @@ namespace Spongebot.Algorithms
 
                 Point[] neighborPositions = new Point[]
                 {
-                    new Point(lastCell.Position.X - 1, lastCell.Position.Y),
                     new Point(lastCell.Position.X, lastCell.Position.Y - 1),
                     new Point(lastCell.Position.X + 1, lastCell.Position.Y),
-                    new Point(lastCell.Position.X, lastCell.Position.Y + 1)
+                    new Point(lastCell.Position.X, lastCell.Position.Y + 1),
+                    new Point(lastCell.Position.X - 1, lastCell.Position.Y)
                 };
 
+                bool hasNeighborToVisit = false;
+                Debug.WriteLine("\n" + lastCell.Position.X + " " + lastCell.Position.Y);
                 foreach (var neighborPosition in neighborPositions)
                 {
+                    Debug.WriteLine(neighborPosition.X + " " + neighborPosition.Y);
                     if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
                     {
+                        hasNeighborToVisit = true;
                         Cell neighbor = board[neighborPosition];
                         pathQ.Enqueue(new BFSPath(currentPath, neighbor));
                     }
+                }
+
+                if (!hasNeighborToVisit)
+                {
+                    currentPath.prevCells.Pop();
+                    Cell previous = currentPath.prevCells.Pop();
+                    pathQ.Enqueue(new BFSPath(currentPath, previous));
                 }
             }
         }
