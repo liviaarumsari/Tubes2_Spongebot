@@ -11,7 +11,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Spongebot
 {
@@ -22,19 +24,23 @@ namespace Spongebot
     {
         private Board? board;
 
+        private FileIO? configFile;
+
+        private double timeInterval = 0;
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private string warningMessage = "";
-        public string WarningMessage
+        private string warningMessageSearchFile = "";
+        public string WarningMessageSearchFile
         {
             get
             {
-                return warningMessage;
+                return warningMessageSearchFile;
             }
             set
             {
-                warningMessage = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WarningMessage"));
+                warningMessageSearchFile = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WarningMessageSearchFile"));
             }
         }
 
@@ -52,19 +58,69 @@ namespace Spongebot
             }
         }
 
+        private string warningMessageVisualize = "";
+        public string WarningMessageVisualize
+        {
+            get
+            {
+                return warningMessageVisualize;
+            }
+            set
+            {
+                warningMessageVisualize = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WarningMessageVisualize"));
+            }
+        }
+
+
+        private string warningMessageTreasure = "";
+        public string WarningMessageTreasure
+        {
+            get
+            {
+                return warningMessageTreasure;
+            }
+            set
+            {
+                warningMessageTreasure = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WarningMessageTreasure"));
+            }
+        }
+
+        public bool IsDFS = false;
+
+        private bool isBFS = true;
+        public bool IsBFS
+        {
+            get
+            {
+                return isBFS;
+            }
+            set
+            {
+                isBFS = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsBFS"));
+            }
+        }
+
+        private bool isTSP = false;
+        public bool IsTSP
+        {
+            get
+            {
+                return isTSP;
+            }
+            set
+            {
+                isTSP = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsTSP"));
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
-
-            string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string deafultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\board2.txt"));
-
-            FileIO configFile = new FileIO(deafultPath);
-            board = configFile.readBoardFromFile();
-
-            // draw the board
-            DrawBoard();
         }
 
         private void ChooseFileButton_Click(object sender, RoutedEventArgs e)
@@ -83,24 +139,22 @@ namespace Spongebot
             {
                 try
                 {
-                    FileIO configFile = new FileIO(fileDialog.FileName, fileDialog.SafeFileName);
+                    configFile = new FileIO(fileDialog.FileName, fileDialog.SafeFileName);
                     ChosenFileName = fileDialog.SafeFileName;
                     board = configFile.readBoardFromFile();
-
-                    // draw the board
-                    DrawBoard();
+                    WarningMessageSearchFile = "";
                 }
                 catch (FileNotFoundException ex)
                 {
-                    WarningMessage = ex.Message + " Please enter a valid file.";
+                    WarningMessageSearchFile = ex.Message + " Please enter a valid file.";
                 }
                 catch (InvalidFileFormatException ex)
                 {
-                    WarningMessage = ex.Message + " Please fix the config file format.";
+                    WarningMessageSearchFile = ex.Message + " Please fix the config file format.";
                 }
                 catch (Exception ex)
                 {
-                    WarningMessage = ex.Message;
+                    WarningMessageSearchFile = ex.Message;
                 }
             }
         }
@@ -112,32 +166,45 @@ namespace Spongebot
                 // initialize your board object here
                 string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 string configPath = System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\", InputFileTextBox.Text);
-                FileIO configFile = new FileIO(System.IO.Path.GetFullPath(configPath), InputFileTextBox.Text);
+                configFile = new FileIO(System.IO.Path.GetFullPath(configPath), InputFileTextBox.Text);
+                WarningMessageSearchFile = "File successfully found!";
+                InputFileWarning.Foreground = Brushes.White;
                 board = configFile.readBoardFromFile();
-
-                // draw the board
-                DrawBoard();
             }
             catch (FileNotFoundException ex)
             {
-                WarningMessage = ex.Message + " Please enter a valid file.";
+                WarningMessageSearchFile = ex.Message + " Please enter a valid file.";
             }
             catch (InvalidFileFormatException ex)
             {
-                WarningMessage = ex.Message + " Please fix the config file format.";
+                WarningMessageSearchFile = ex.Message + " Please fix the config file format.";
             }
             catch (Exception ex)
             {
-                WarningMessage = ex.Message;
+                WarningMessageSearchFile = ex.Message;
+            }
+        }
+
+        private void VisualizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (configFile == null)
+            {
+                WarningMessageVisualize = "Please choose your file first.";
+            }
+            else
+            {
+                WarningMessageVisualize = "";
+                outputColumn.Visibility = Visibility.Visible;
+                DrawBoard();
             }
         }
 
         private void DrawBoard()
         {
             // clear the grid
-            MainGrid.Children.Clear();
-            MainGrid.RowDefinitions.Clear();
-            MainGrid.ColumnDefinitions.Clear();
+            boardGrid.Children.Clear();
+            boardGrid.RowDefinitions.Clear();
+            boardGrid.ColumnDefinitions.Clear();
 
             int n_column = board.Cells.GetLength(0);
             int n_row = board.Cells.GetLength(1);
@@ -148,13 +215,13 @@ namespace Spongebot
             {
                 RowDefinition gridRow = new RowDefinition();
                 gridRow.Height = new GridLength(gridLen);
-                MainGrid.RowDefinitions.Add(gridRow);
+                boardGrid.RowDefinitions.Add(gridRow);
             }
             for (int x = 0; x < n_column; x++)
             {
                 ColumnDefinition gridCol = new ColumnDefinition();
                 gridCol.Width = new GridLength(gridLen);
-                MainGrid.ColumnDefinitions.Add(gridCol);
+                boardGrid.ColumnDefinitions.Add(gridCol);
             }
 
             // add cells to the grid
@@ -166,41 +233,85 @@ namespace Spongebot
                     Border border = new Border();
                     border.DataContext = cell;
                     border.SetBinding(Border.BackgroundProperty, new Binding("CellBackground")); // Bind Border to Cell's CellBackground property
+                    border.BorderBrush = Brushes.Transparent;
+                    border.Margin = new Thickness(1);
                     if (cell.Type == CellType.Start)
                     {
-                        TextBlock txtBlock1 = new TextBlock();
-                        txtBlock1.Text = "Start";
-                        txtBlock1.FontSize = 14;
-                        txtBlock1.HorizontalAlignment = HorizontalAlignment.Center;
-                        txtBlock1.VerticalAlignment = VerticalAlignment.Center;
-                        Grid.SetColumn(txtBlock1, x);
-                        Grid.SetRow(txtBlock1, y);
-                        border.Child = txtBlock1;
+                        System.Windows.Controls.Image startImage = new System.Windows.Controls.Image();
+                        startImage.Source = new BitmapImage(new Uri("./Images/startImg.png", UriKind.Relative));
+                        startImage.Style = (Style)FindResource("ImageBoardStyle");
+                        startImage.Height = (int)gridLen / 2.5;
+                        Grid.SetColumn(startImage, x);
+                        Grid.SetRow(startImage, y);
+                        border.Child = startImage;
                     }
                     else if (cell.Type == CellType.Treasure)
                     {
-                        TextBlock txtBlock1 = new TextBlock();
-                        txtBlock1.Text = "Treasure";
-                        txtBlock1.FontSize = 14;
-                        txtBlock1.HorizontalAlignment = HorizontalAlignment.Center;
-                        txtBlock1.VerticalAlignment = VerticalAlignment.Center;
-                        Grid.SetColumn(txtBlock1, x);
-                        Grid.SetRow(txtBlock1, y);
-                        border.Child = txtBlock1;
+                        System.Windows.Controls.Image treasureImage = new System.Windows.Controls.Image();
+                        treasureImage.Source = new BitmapImage(new Uri("./Images/treasureImg.png", UriKind.Relative));
+                        treasureImage.Style = (Style)FindResource("ImageBoardStyle");
+                        treasureImage.Height = (int)gridLen / 2.5;
+                        Grid.SetColumn(treasureImage, x);
+                        Grid.SetRow(treasureImage, y);
+                        border.Child = treasureImage;
                     }
                     Grid.SetColumn(border, x);
                     Grid.SetRow(border, y);
-                    MainGrid.Children.Add(border);
+                    boardGrid.Children.Add(border);
                 }
             }
         }
 
-        private void VisualizeButton_Click(object sender, RoutedEventArgs e)
+        private void BFSRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (board != null)
+            isBFS = true;
+            IsDFS = !isBFS;
+        }
+
+        private void DFSRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            isBFS = false;
+            IsDFS = !isBFS;
+        }
+
+        private void TimeIntervalSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            timeInterval = TimeIntervalSlider.Value;
+        }
+
+        private void TSPCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            IsTSP = !IsTSP;
+        }
+
+        private void SearchTreasureButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(board != null)
             {
-                BFS bfs = new BFS(board);
-                bfs.run();
+                outputColumn.Visibility = Visibility.Visible;
+                DrawBoard();
+                WarningMessageTreasure = "";
+                if (isBFS)
+                {
+                    // Ambil attr IsTSP, timeInterval
+                    BFS bfs = new BFS(board);
+                    bfs.run();
+                    // Set output Result
+                    // RouteLabel.Content = 
+                    //NodesLabel.Content =
+                    //StepsLabel.Content =
+                    //ExecutionTimeLabel.Content =
+            
+                }
+                else
+                {
+                    //Jalanin DFS
+                }
+                resultOutput.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                WarningMessageTreasure = "Please input and visualize your file first!";
             }
         }
     }
