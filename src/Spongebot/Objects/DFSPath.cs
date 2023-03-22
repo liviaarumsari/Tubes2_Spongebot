@@ -7,7 +7,7 @@ namespace Spongebot.Objects
     internal class DFSPath
     {
         private Cell[] path;
-        private Stack<Cell> prevCell;
+        public Stack<Cell> prevCells = new Stack<Cell>();
         public int Length {
             get { return path.Length; }
         }
@@ -16,9 +16,11 @@ namespace Spongebot.Objects
         public DFSPath(params Cell[] cells)
         {
             path = new Cell[cells.Length];
-            prevCell.Push(path[cells.Length]);
             Array.Copy(cells, path, cells.Length);
             treasureCount = countTreasures(path);
+            foreach (var cell in cells){
+                prevCells.Push(cell);
+            }
         }
 
         public DFSPath(DFSPath _path, params Cell[] cells) {
@@ -26,6 +28,17 @@ namespace Spongebot.Objects
             Array.Copy(_path.path, path, _path.Length);
             Array.Copy(cells, 0, path, _path.Length, cells.Length);
             treasureCount = countTreasures(path);
+            prevCells = CloneStack(_path.prevCells);
+            foreach (var cell in cells){
+                prevCells.Push(cell);
+            }
+        }
+
+        public Stack<Cell> CloneStack(Stack<Cell> original){
+            var arr = new Cell[original.Count];
+            original.CopyTo(arr, 0);
+            Array.Reverse(arr);
+            return new Stack<Cell>(arr);
         }
 
         private int countTreasures(Cell[] cells)
