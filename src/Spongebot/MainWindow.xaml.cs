@@ -19,12 +19,6 @@ namespace Spongebot
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private Board board;
-        private readonly SolidColorBrush[] cellColors = {
-            Brushes.Gray, // CellType.Wall
-            Brushes.Red, // CellType.Empty
-            Brushes.Green, // CellType.Start
-            Brushes.Yellow // CellType.Treasure
-        };
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -119,54 +113,54 @@ namespace Spongebot
             MainGrid.RowDefinitions.Clear();
             MainGrid.ColumnDefinitions.Clear();
 
+            int n_column = board.Cells.GetLength(0);
+            int n_row = board.Cells.GetLength(1);
+            var gridLen = n_column > n_row ? 400/n_column : 400/n_row;
+
             // add rows and columns to the grid
-            for (int y = 0; y < board.Cells.GetLength(0); y++)
+            for (int y = 0; y < n_column; y++)
             {
                 RowDefinition gridRow = new RowDefinition();
-                gridRow.Height = new GridLength(45);
+                gridRow.Height = new GridLength(gridLen);
                 MainGrid.RowDefinitions.Add(gridRow);
             }
-            for (int x = 0; x < board.Cells.GetLength(1); x++)
+            for (int x = 0; x < n_row; x++)
             {
                 ColumnDefinition gridCol = new ColumnDefinition();
-                gridCol.Width = new GridLength(45);
+                gridCol.Width = new GridLength(gridLen);
                 MainGrid.ColumnDefinitions.Add(gridCol);
             }
 
             // add cells to the grid
-            for (int y = 0; y < board.Cells.GetLength(1); y++)
+            for (int y = 0; y < n_row; y++)
             {
-                for (int x = 0; x < board.Cells.GetLength(0); x++)
+                for (int x = 0; x < n_column; x++)
                 {
                     Cell cell = board.Cells[x, y];
                     Border border = new Border();
+                    border.DataContext = cell;
+                    border.SetBinding(Border.BackgroundProperty, new Binding("CellBackground")); // Bind Border to Cell's CellBackground property
                     if (cell.Type == CellType.Start)
                     {
                         TextBlock txtBlock1 = new TextBlock();
                         txtBlock1.Text = "Start";
                         txtBlock1.FontSize = 14;
+                        txtBlock1.HorizontalAlignment = HorizontalAlignment.Center;
+                        txtBlock1.VerticalAlignment = VerticalAlignment.Center;
                         Grid.SetColumn(txtBlock1, x);
                         Grid.SetRow(txtBlock1, y);
                         border.Child = txtBlock1;
-                        border.Background = Brushes.AliceBlue;
                     }
                     else if (cell.Type == CellType.Treasure)
                     {
                         TextBlock txtBlock1 = new TextBlock();
                         txtBlock1.Text = "Treasure";
                         txtBlock1.FontSize = 14;
+                        txtBlock1.HorizontalAlignment = HorizontalAlignment.Center;
+                        txtBlock1.VerticalAlignment = VerticalAlignment.Center;
                         Grid.SetColumn(txtBlock1, x);
                         Grid.SetRow(txtBlock1, y);
                         border.Child = txtBlock1;
-                        border.Background = Brushes.Orange;
-                    }
-                    else if (cell.Type == CellType.Empty)
-                    {
-                        border.Background = Brushes.White;
-                    }
-                    else
-                    {
-                        border.Background = Brushes.Black;
                     }
                     Grid.SetColumn(border, x);
                     Grid.SetRow(border, y);
@@ -174,47 +168,5 @@ namespace Spongebot
                 }
             }
         }
-
-        //private void DrawBoard()
-        //{
-        //    DataTable boardData = new DataTable();
-        //    //dataGridBoard.Width = 300;
-
-
-        //    for (int x = 0; x < board.Cells.GetLength(1); x++)
-        //    {
-        //        boardData.Columns.Add(new DataColumn("Column" + x, typeof(string)));
-        //    }
-
-        //    for (int i = 0; i < board.Cells.GetLength(0); i++)
-        //    {
-        //        DataRow row = boardData.NewRow();
-        //        for (int j = 0; j < board.Cells.GetLength(1); j++)
-        //        {
-        //            CellType tes = board.Cells[i, j].Type;
-        //            if (tes == CellType.Wall)
-        //            {
-        //                row[j] = "XXX";
-        //            }
-        //            else if (tes == CellType.Start)
-        //            {
-        //                row[j] = "Start";
-        //            }
-        //            else if (tes == CellType.Empty)
-        //            {
-        //                row[j] = "";
-        //            }
-        //            else
-        //            {
-        //                row[j] = "Treasure!";
-        //            }
-        //            //row[j] = board.Cells[i, j];
-        //            //dataGridBoard.Items.Refresh();
-        //        }
-        //        boardData.Rows.Add(row);
-        //    }
-
-        //    dataGridBoard.DataContext = boardData;
-        //}
     }
 }
