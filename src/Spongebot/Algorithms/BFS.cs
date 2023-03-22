@@ -18,7 +18,7 @@ namespace Spongebot.Algorithms
         public BFS(Board board)
         {
             this.board = board;
-
+            startCell = null!;
             for (int x = 0; x < board.Cells.GetLength(0); x++)
             {
                 for (int y = 0; y < board.Cells.GetLength(1); y++)

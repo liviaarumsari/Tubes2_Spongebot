@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Spongebot.Enums;
 
 namespace Spongebot.Objects
@@ -6,12 +7,16 @@ namespace Spongebot.Objects
     internal class DFSPath
     {
         private Cell[] path;
-        public int Length { get; }
+        private Stack<Cell> prevCell;
+        public int Length {
+            get { return path.Length; }
+        }
         public int treasureCount { get; }
 
         public DFSPath(params Cell[] cells)
         {
             path = new Cell[cells.Length];
+            prevCell.Push(path[cells.Length]);
             Array.Copy(cells, path, cells.Length);
             treasureCount = countTreasures(path);
         }
