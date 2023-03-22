@@ -9,11 +9,21 @@ namespace Spongebot.IO;
 class FileIO
 {
     private string filePath { get; }
+    private string fileName { get; }
 
     public FileIO(string _filePath)
     {
+        fileName = Path.GetFileName(_filePath);
         if (!File.Exists(_filePath))
-            throw new FileNotFoundException(_filePath + " was not found.");
+            throw new FileNotFoundException("\"" + fileName + "\" was not found.");
+        this.filePath = _filePath;
+    }
+
+    public FileIO(string _filePath, string _filename)
+    {
+        this.fileName = _filename;
+        if (!File.Exists(_filePath))
+            throw new FileNotFoundException("\"" + fileName + "\" was not found.");
         this.filePath = _filePath;
     }
 
@@ -23,14 +33,16 @@ class FileIO
         int rows = lines.GetLength(0), cols = 0;
         Cell[,] cells;
 
-        Dictionary<string, CellType> cellCodes = new Dictionary<string, CellType>();
-        cellCodes.Add("k", CellType.Start);
-        cellCodes.Add("t", CellType.Treasure);
-        cellCodes.Add("r", CellType.Empty);
-        cellCodes.Add("x", CellType.Wall);
+        Dictionary<string, CellType> cellCodes = new Dictionary<string, CellType>
+        {
+            { "k", CellType.Start },
+            { "t", CellType.Treasure },
+            { "r", CellType.Empty },
+            { "x", CellType.Wall }
+        };
 
         if (rows == 0)
-            throw new InvalidFileFormatException(filePath + " is empty");
+            throw new InvalidFileFormatException("\"" + fileName + "\" is empty");
 
         foreach (string c in lines[0].Split(' '))
         {
@@ -39,9 +51,9 @@ class FileIO
         }
 
         if (cols == 0)
-            throw new InvalidFileFormatException(filePath + " is empty");
+            throw new InvalidFileFormatException("\"" + fileName + "\" is empty");
 
-        cells = new Cell[rows, cols];
+        cells = new Cell[cols, rows];
 
         for (int y = 0; y < rows; y++)
         {
@@ -55,7 +67,7 @@ class FileIO
                 if (code.Length == 0)
                     continue;
                 if (colsInLine == cols)
-                    throw new InvalidFileFormatException(filePath + " has inconsistent number of columns");
+                    throw new InvalidFileFormatException("\"" + fileName + "\" has inconsistent number of columns");
 
                 try
                 {
@@ -63,7 +75,7 @@ class FileIO
                 }
                 catch (KeyNotFoundException)
                 {
-                    throw new InvalidFileFormatException(filePath + " has unknown cell type code (valid codes: K, T, R, X)"); ;
+                    throw new InvalidFileFormatException("\"" + fileName + "\" has unknown cell type code (valid codes: K, T, R, X)"); ;
                 }
             }
         }

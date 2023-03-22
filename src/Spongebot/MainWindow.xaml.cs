@@ -1,29 +1,22 @@
-﻿using Spongebot.Objects;
+﻿using Microsoft.Win32;
 using Spongebot.Enums;
+using Spongebot.Exceptions;
 using Spongebot.IO;
+using Spongebot.Objects;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Diagnostics;
-using System.Data;
 
 namespace Spongebot
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private Board board;
         private readonly SolidColorBrush[] cellColors = {
@@ -33,16 +26,90 @@ namespace Spongebot
             Brushes.Yellow // CellType.Treasure
         };
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private string warningMessage = "";
+        public string WarningMessage
+        {
+            get
+            {
+                return warningMessage;
+            }
+            set
+            {
+                warningMessage = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WarningMessage"));
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
+        }
 
-            // initialize your board object here
-            FileIO configFile = new FileIO(@"C:\Users\livia\OneDrive - Institut Teknologi Bandung\IF\SEM 4\stima\Tubes 02\test\board1.txt");
-            board = configFile.readBoardFromFile();
+        private void ChooseFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string deafultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\"));
 
-            // draw the board
-            DrawBoard();
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.InitialDirectory = deafultPath;
+            fileDialog.Filter = "Maze config file | *.txt";
+            fileDialog.Title = "Please pick your maze config file";
+
+            bool? success = fileDialog.ShowDialog();
+
+            if (success == true)
+            {
+                try
+                {
+                    FileIO configFile = new FileIO(fileDialog.FileName, fileDialog.SafeFileName);
+                    board = configFile.readBoardFromFile();
+
+                    // draw the board
+                    DrawBoard();
+                }
+                catch (FileNotFoundException ex)
+                {
+                    WarningMessage = ex.Message + " Please enter a valid file.";
+                }
+                catch (InvalidFileFormatException ex)
+                {
+                    WarningMessage = ex.Message + " Please fix the config file format.";
+                }
+                catch (Exception ex)
+                {
+                    WarningMessage = ex.Message;
+                }
+            }
+        }
+
+        private void SearchFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // initialize your board object here
+                string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string configPath = System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\", InputFileTextBox.Text);
+                FileIO configFile = new FileIO(System.IO.Path.GetFullPath(configPath), InputFileTextBox.Text);
+                board = configFile.readBoardFromFile();
+
+                // draw the board
+                DrawBoard();
+            }
+            catch (FileNotFoundException ex)
+            {
+                WarningMessage = ex.Message + " Please enter a valid file.";
+            }
+            catch (InvalidFileFormatException ex)
+            {
+                WarningMessage = ex.Message + " Please fix the config file format.";
+            }
+            catch (Exception ex)
+            {
+                WarningMessage = ex.Message;
+            }
         }
 
         private void DrawBoard()

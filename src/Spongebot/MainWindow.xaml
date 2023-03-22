@@ -31,10 +31,10 @@
         <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderCardStyle}">
             <StackPanel Grid.Column="0" Grid.Row="1" Style="{StaticResource StackPanelCardTemplate}" >
                 <!-- Input file text box -->
-                <Label Content="File Input" FontFamily="./Fonts/#Lato-Bold" Margin="24 24 0 16"/>
+                <Label Content="File Input" FontFamily="./Fonts/#Lato-Bold" Margin="24 16 0 16"/>
                 <StackPanel Orientation="Horizontal" Margin="24 0">
-                    <Button Template="{StaticResource ButtonTemplate}" Name="ChooseFileButton" Content="Choose File" Foreground="#FDFEF3" />
-                    <Label Content="Filename.txt" />
+                    <Button Template="{StaticResource ButtonTemplate}" Click="ChooseFileButton_Click" Name="ChooseFileButton" Content="Choose File" Foreground="#FDFEF3" />
+                    <Label Content="{Binding ChosenFileName}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="24 16">
                     <Line  
@@ -49,11 +49,12 @@
                         Stroke="#E29729"  
                         StrokeThickness="2" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="24 0">
-                    <TextBox BorderBrush="#F88BBC" Padding="16 8 64 8" Margin="0 5 12 5" Name="InputFileTextBox" BorderThickness="1">Input your file name</TextBox>
-                    <Button Template="{StaticResource ButtonTemplate}" Margin="0 5 0 5" Name="SearchFileButton" Content="Search" Foreground="#FDFEF3" BorderThickness="0" />
-                </StackPanel>
+                <DockPanel Margin="24 0">
+                    <Button DockPanel.Dock="Right" Template="{StaticResource ButtonTemplate}" Margin="0 5 0 5" Name="SearchFileButton" Click="SearchFileButton_Click" Content="Search" Foreground="#FDFEF3" BorderThickness="0" />
+                    <TextBox DockPanel.Dock="Left" BorderBrush="#F88BBC" Padding="16 8 64 8" Margin="0 5 12 5" Name="InputFileTextBox" BorderThickness="1">Input your file name</TextBox>
+                </DockPanel>
                 <Button Template="{StaticResource ButtonTemplate}" Content="Visualize" Margin="24 24" Foreground="#FDFEF3" />
+                <TextBlock x:Name="InputFileWarning" Text="{Binding WarningMessage}" TextWrapping="Wrap" />
             </StackPanel>
         </Border>
 
