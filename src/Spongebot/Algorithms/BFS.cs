@@ -18,7 +18,7 @@ namespace Spongebot.Algorithms
         public BFS(Board board)
         {
             this.board = board;
-
+            startCell = null!;
             for (int x = 0; x < board.Cells.GetLength(0); x++)
             {
                 for (int y = 0; y < board.Cells.GetLength(1); y++)
@@ -60,11 +60,37 @@ namespace Spongebot.Algorithms
                 BFSPath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
+                for (int i = 0; i < currentPath.Length; i++)
+                {
+                    if (currentPath[i].CellBackground == Brushes.Cornsilk)
+                    {
+                        currentPath[i].CellBackground = Brushes.PeachPuff;
+                    }
+                    else if (currentPath[i].CellBackground != Brushes.PeachPuff)
+                    {
+                        currentPath[i].CellBackground = Brushes.Cornsilk;
+                    }
+                }
+                currentPath[currentPath.Length - 1].CellBackground = Brushes.LightBlue;
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+                for (int i = 0; i < currentPath.Length; i++)
+                {
+                    currentPath[i].CellBackground = Brushes.White;
+                }
+
                 if (currentPath.treasureCount == treasureCells.Count)
                 {
                     for (int i = 0; i < currentPath.Length; i++)
                     {
-                        currentPath[i].CellBackground = Brushes.Green;
+                        if (currentPath[i].CellBackground == Brushes.Green)
+                        {
+                            currentPath[i].CellBackground = Brushes.DarkGreen;
+                        }
+                        else if (currentPath[i].CellBackground != Brushes.DarkGreen)
+                        {
+                            currentPath[i].CellBackground = Brushes.Green;
+                        }
                         await Task.Delay(TimeSpan.FromMilliseconds(500));
                     }
                     return;
@@ -72,19 +98,30 @@ namespace Spongebot.Algorithms
 
                 Point[] neighborPositions = new Point[]
                 {
-                    new Point(lastCell.Position.X - 1, lastCell.Position.Y),
                     new Point(lastCell.Position.X, lastCell.Position.Y - 1),
                     new Point(lastCell.Position.X + 1, lastCell.Position.Y),
-                    new Point(lastCell.Position.X, lastCell.Position.Y + 1)
+                    new Point(lastCell.Position.X, lastCell.Position.Y + 1),
+                    new Point(lastCell.Position.X - 1, lastCell.Position.Y)
                 };
 
+                bool hasNeighborToVisit = false;
+                Debug.WriteLine("\n" + lastCell.Position.X + " " + lastCell.Position.Y);
                 foreach (var neighborPosition in neighborPositions)
                 {
+                    Debug.WriteLine(neighborPosition.X + " " + neighborPosition.Y);
                     if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
                     {
+                        hasNeighborToVisit = true;
                         Cell neighbor = board[neighborPosition];
                         pathQ.Enqueue(new BFSPath(currentPath, neighbor));
                     }
+                }
+
+                if (!hasNeighborToVisit)
+                {
+                    currentPath.prevCells.Pop();
+                    Cell previous = currentPath.prevCells.Pop();
+                    pathQ.Enqueue(new BFSPath(currentPath, previous));
                 }
             }
         }

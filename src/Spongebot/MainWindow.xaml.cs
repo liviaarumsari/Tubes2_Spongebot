@@ -313,6 +313,11 @@ namespace Spongebot
             {
                 WarningMessageTreasure = "Please input and visualize your file first!";
             }
+            //if (board != null)
+            //{
+            //    DFS dfs = new DFS(board);
+            //    dfs.run();
+            //}
         }
     }
 }
