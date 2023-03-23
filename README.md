@@ -11,7 +11,8 @@
 
 ## **General Information**
 >Finding treasure(s) in a maze can be solved by using search algorithm. Maze used by the program is a *n x m* maze which user can input their custom maze from a .txt file. Here are the symbol of the maze:
->| Symbol    | Description |
+
+| Symbol    | Description |
 |------------|--------------|
 | K | Start Point |
 | R | Routes |
