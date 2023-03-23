@@ -137,7 +137,7 @@ namespace Spongebot.Algorithms
 
                 currentPath.stepColor();
                 lastCell.stepPathVisitingColor();
-                await Task.Delay(TimeSpan.FromMilliseconds(500));
+                await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
                 currentPath.clearColor();
 
                 if (currentPath.treasureCount == treasureCells.Count && lastCell.Type == CellType.Start)
