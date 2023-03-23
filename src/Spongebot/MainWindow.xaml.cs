@@ -279,6 +279,11 @@ namespace Spongebot
                 outputColumn.Visibility = Visibility.Visible;
                 DrawBoard();
                 WarningMessageTreasure = "";
+                RouteLabel.Content = "-";
+                NodesLabel.Content = 0;
+                StepsLabel.Content = 0;
+                ExecutionTimeLabel.Content = "0 ms";
+                var watch = new System.Diagnostics.Stopwatch();
                 if (isBFS)
                 {
                     // Ambil attr IsTSP, timeInterval
@@ -301,6 +306,8 @@ namespace Spongebot
                 }
                 else
                 {
+                    watch.Start();
+                    
                     DFS DFS = new DFS(board);
                     if (TSPCheckbox.IsChecked == true)
                     {
@@ -312,6 +319,14 @@ namespace Spongebot
                         await DFS.run(false,timeInterval);
                         Debug.WriteLine("Non TSP");
                     }
+                    watch.Stop();
+
+                    Debug.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
+                    // Set output Result
+                    RouteLabel.Content = DFS.finalRoute;
+                    NodesLabel.Content = DFS.visitedNodes;
+                    StepsLabel.Content = DFS.totalSteps;
+                    ExecutionTimeLabel.Content = watch.ElapsedMilliseconds + " ms";
                 }
                 resultOutput.Visibility = Visibility.Visible;
             }
