@@ -65,9 +65,15 @@ namespace Spongebot.Algorithms
                 BFSPath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
-
+                foreach (var path in completePath)
+                {
+                    path.stepColor();
+                }
                 currentPath.stepColor();
+
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+                board.clearColors();
 
                 if (unvisitedTreasure.Contains(lastCell))
                 {
@@ -75,11 +81,8 @@ namespace Spongebot.Algorithms
                     pathQ.Clear();
                     unvisitedTreasure.Remove(lastCell);
 
-                    currentPath.clearColor();
                     currentPath = new BFSPath();
                 }
-                
-                currentPath.clearColor();
 
                 if (unvisitedTreasure.Count == 0)
                 {
