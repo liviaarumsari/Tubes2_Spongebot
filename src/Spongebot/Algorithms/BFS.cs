@@ -60,16 +60,34 @@ namespace Spongebot.Algorithms
                 BFSPath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
+                for (int i = 0; i < currentPath.Length; i++)
+                {
+                    if (currentPath[i].CellBackground == Brushes.Cornsilk)
+                    {
+                        currentPath[i].CellBackground = Brushes.PeachPuff;
+                    }
+                    else if (currentPath[i].CellBackground != Brushes.PeachPuff)
+                    {
+                        currentPath[i].CellBackground = Brushes.Cornsilk;
+                    }
+                }
+                currentPath[currentPath.Length - 1].CellBackground = Brushes.LightBlue;
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+                for (int i = 0; i < currentPath.Length; i++)
+                {
+                    currentPath[i].CellBackground = Brushes.White;
+                }
+
                 if (currentPath.treasureCount == treasureCells.Count)
                 {
                     for (int i = 0; i < currentPath.Length; i++)
                     {
                         if (currentPath[i].CellBackground == Brushes.Green)
                         {
-
                             currentPath[i].CellBackground = Brushes.DarkGreen;
                         }
-                        else
+                        else if (currentPath[i].CellBackground != Brushes.DarkGreen)
                         {
                             currentPath[i].CellBackground = Brushes.Green;
                         }
