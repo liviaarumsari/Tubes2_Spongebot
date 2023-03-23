@@ -15,7 +15,8 @@ namespace Spongebot.Algorithms
         private List<Cell> treasureCells = new List<Cell>();
         public string finalRoute = new String("");
         public int visitedNodes;
-        public int totalSteps ;
+        public int totalSteps;
+
         public BFS(Board board)
         {
             this.board = board;
@@ -54,21 +55,43 @@ namespace Spongebot.Algorithms
             return false;
         }
 
+        private string route(Cell cell1, Cell cell2)
+        {
+            if (cell1.Position.X == cell2.Position.X - 1)
+            {
+                return "R";
+            }
+            else if (cell1.Position.X == cell2.Position.X + 1)
+            {
+                return "L";
+            }
+            else if (cell1.Position.Y == cell2.Position.Y - 1)
+            {
+                return "D";
+            }
+            return "U";
+        }
+
         public async Task runNonTSP(double timeInterval)
         {
             board.clearColors();
 
             MazePath initialPath = new MazePath(startCell);
-            List<MazePath> completePath = new List<MazePath> { initialPath };
+            List<MazePath> completePath = new List<MazePath>();
             HashSet<Cell> unvisitedTreasure = new HashSet<Cell>(treasureCells);
 
             Queue<MazePath> pathQ = new Queue<MazePath>();
             pathQ.Enqueue(initialPath);
 
+            this.visitedNodes = 0;
+            this.totalSteps = 0;
+            this.finalRoute = "";
+
             while (pathQ.Count != 0)
             {
                 MazePath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
+                this.visitedNodes++;
 
                 foreach (var path in completePath)
                 {
@@ -88,17 +111,34 @@ namespace Spongebot.Algorithms
                     unvisitedTreasure.Remove(lastCell);
 
                     currentPath = new MazePath();
+                    Debug.WriteLine($"lastCell: ({lastCell.Position.X}, {lastCell.Position.Y})");
                 }
 
                 if (unvisitedTreasure.Count == 0)
                 {
+                    Cell? previousLastCell = null;
                     foreach (var path in completePath)
                     {
                         for (int i = 0; i < path.Length; i++)
                         {
                             path[i].finalPathVisitedColor();
                             await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+                            this.totalSteps++;
+
+                            if (i == 0 && previousLastCell != null)
+                            {
+                                this.finalRoute += route(previousLastCell, path[i]);
+                            }
+                            else if (i != 0)
+                            {
+                                this.finalRoute += route(path[i - 1], path[i]);
+                            }
+
+                            if (!(i == 0 && path == completePath[0]) &&
+                                !(i == path.Length - 1 && path == completePath[completePath.Count - 1]))
+                                this.finalRoute += " - ";
                         }
+                        previousLastCell = path[path.Length - 1];
                     }
                     return;
                 }
@@ -130,10 +170,15 @@ namespace Spongebot.Algorithms
             Queue<MazePath> pathQ = new Queue<MazePath>();
             pathQ.Enqueue(initialPath);
 
+            this.visitedNodes = 0;
+            this.totalSteps = 0;
+            this.finalRoute = "";
+
             while (pathQ.Count != 0)
             {
                 MazePath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
+                this.visitedNodes++;
 
                 currentPath.stepColor();
                 lastCell.stepPathVisitingColor();
@@ -142,10 +187,15 @@ namespace Spongebot.Algorithms
 
                 if (currentPath.treasureCount == treasureCells.Count && lastCell.Type == CellType.Start)
                 {
+                    this.totalSteps = currentPath.Length;
                     for (int i = 0; i < currentPath.Length; i++)
                     {
                         currentPath[i].finalPathVisitedColor();
                         await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+                        if (i > 1)
+                            this.finalRoute += " - ";
+                        if (i > 0)
+                            this.finalRoute += route(currentPath[i - 1], currentPath[i]);
                     }
                     return;
                 }

@@ -286,7 +286,8 @@ namespace Spongebot
                 var watch = new System.Diagnostics.Stopwatch();
                 if (isBFS)
                 {
-                    // Ambil attr IsTSP, timeInterval
+                    watch.Start();
+                    
                     BFS bfs = new BFS(board);
                     if (TSPCheckbox.IsChecked == true)
                     {
@@ -297,17 +298,17 @@ namespace Spongebot
                     {
                         await bfs.runNonTSP(timeInterval);
                     }
-                    // Set output Result
-                    // RouteLabel.Content = 
-                    //NodesLabel.Content =
-                    //StepsLabel.Content =
-                    //ExecutionTimeLabel.Content =
-
+                    watch.Stop();
+                    
+                    RouteLabel.Content = bfs.finalRoute;
+                    NodesLabel.Content = bfs.visitedNodes;
+                    StepsLabel.Content = bfs.totalSteps;
+                    ExecutionTimeLabel.Content = watch.ElapsedMilliseconds + " ms";
                 }
                 else
                 {
                     watch.Start();
-                    
+
                     DFS DFS = new DFS(board);
                     if (TSPCheckbox.IsChecked == true)
                     {
@@ -316,7 +317,7 @@ namespace Spongebot
                     }
                     else
                     {
-                        await DFS.run(false,timeInterval);
+                        await DFS.run(false, timeInterval);
                         Debug.WriteLine("Non TSP");
                     }
                     watch.Stop();
