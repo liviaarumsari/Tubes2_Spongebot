@@ -49,7 +49,7 @@ namespace Spongebot.Algorithms
             return false;
         }
 
-        public async void runNonTSP()
+        public async Task runNonTSP()
         {
             board.clearColors();
 
@@ -70,6 +70,7 @@ namespace Spongebot.Algorithms
                     path.stepColor();
                 }
                 currentPath.stepColor();
+                lastCell.stepPathVisitingColor();
 
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
 
@@ -116,7 +117,7 @@ namespace Spongebot.Algorithms
             }
         }
 
-        public async void runTSP()
+        public async Task runTSP()
         {
             board.clearColors();
             BFSPath initialPath = new BFSPath(startCell);

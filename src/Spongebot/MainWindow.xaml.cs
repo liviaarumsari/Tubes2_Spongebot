@@ -266,7 +266,7 @@ namespace Spongebot
             timeInterval = TimeIntervalSlider.Value;
         }
 
-        private void SearchTreasureButton_Click(object sender, RoutedEventArgs e)
+        private async void SearchTreasureButton_Click(object sender, RoutedEventArgs e)
         {
             if (board != null)
             {
@@ -279,12 +279,12 @@ namespace Spongebot
                     BFS bfs = new BFS(board);
                     if (TSPCheckbox.IsChecked == true)
                     {
-                        bfs.runTSP();
+                        await bfs.runTSP();
                         Debug.WriteLine("TSP");
                     }
                     else
                     {
-                        bfs.runNonTSP();
+                        await bfs.runNonTSP();
                         Debug.WriteLine("Non TSP");
                     }
                     // Set output Result

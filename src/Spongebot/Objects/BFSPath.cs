@@ -63,7 +63,6 @@ namespace Spongebot.Objects
             {
                 cell.stepPathVisitedColor();
             }
-            path[Length - 1].stepPathVisitingColor();
         }
 
         public void clearColor()
