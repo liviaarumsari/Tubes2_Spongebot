@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\logoImg.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,10 @@
     <None Remove="Images\searchImg.png" />
     <None Remove="Images\startImg.png" />
     <None Remove="Images\treasureImg.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\logoImg.ico" />
   </ItemGroup>
 
   <ItemGroup>
