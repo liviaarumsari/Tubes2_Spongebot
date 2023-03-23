@@ -55,6 +55,9 @@ class FileIO
 
         cells = new Cell[cols, rows];
 
+        int startCount = 0;
+        int treasureCount = 0;
+
         for (int y = 0; y < rows; y++)
         {
             int colsInLine = 0;
@@ -72,6 +75,11 @@ class FileIO
                 try
                 {
                     cells[x, y] = new Cell(x, y, cellCodes[code]);
+
+                    if (cells[x,y].Type == CellType.Start)
+                        startCount++;
+                    if (cells[x,y].Type == CellType.Treasure)
+                        treasureCount++;
                 }
                 catch (KeyNotFoundException)
                 {
@@ -79,6 +87,11 @@ class FileIO
                 }
             }
         }
+
+        if (startCount != 1)
+            throw new InvalidFileFormatException("\"" + fileName + "\" does not contain start cell (code: K)");
+        if (treasureCount == 0)
+            throw new InvalidFileFormatException("\"" + fileName + "\" does not contain any treasures (code: T)");
 
         return new Board(cells);
     }

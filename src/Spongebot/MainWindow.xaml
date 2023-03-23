@@ -89,8 +89,8 @@
                         <!-- Algorithm chooser with two radio buttons: BFS and DFS -->
                         <StackPanel Orientation="Vertical" Grid.Column="0">
                             <Label Content="Algorithm" Margin="0 10 0 5"/>
-                            <RadioButton Margin="0 5 5 5" Name="BFSRadioButton" Content="BFS" IsChecked="{Binding IsBFS}" Checked="BFSRadioButton_Checked" Template="{StaticResource RadioTemplate}"/>
-                            <RadioButton Margin="0 5 0 5" Name="DFSRadioButton" Content="DFS" IsChecked="{Binding IsDFS}" Checked="DFSRadioButton_Checked" Template="{StaticResource RadioTemplate}"/>
+                            <RadioButton Margin="0 5 5 5" Name="BFSRadioButton" Content="BFS" IsChecked="{Binding IsBFS}" Template="{StaticResource RadioTemplate}"/>
+                            <RadioButton Margin="0 5 0 5" Name="DFSRadioButton" Content="DFS" IsChecked="{Binding IsDFS}" Template="{StaticResource RadioTemplate}"/>
                         </StackPanel>
 
                         <!-- Time duration input box -->

@@ -163,7 +163,6 @@ namespace Spongebot.Algorithms
                     }
                 }
 
-                // FIX IF VISITS NEIGHBOR
                 if (!hasNeighborToVisit)
                 {
                     currentPath.prevCells.Pop();
