@@ -1,5 +1,7 @@
 using Spongebot.Enums;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
@@ -10,8 +12,8 @@ class Cell : INotifyPropertyChanged
     public CellType Type { get; }
     public Point Position { get; }
 
-    private Brush cellBackground;
-    public Brush CellBackground
+    private SolidColorBrush cellBackground;
+    public SolidColorBrush CellBackground
     {
         get { return cellBackground; }
         set
@@ -59,13 +61,15 @@ class Cell : INotifyPropertyChanged
 
     public void finalPathVisitedColor()
     {
-        if (CellBackground == Brushes.LightGreen)
+        SolidColorBrush greenBrush = new SolidColorBrush(Color.FromRgb(93, 190, 116));
+        if (CellBackground is SolidColorBrush solidColorBrush && solidColorBrush.Color.Equals(greenBrush.Color) && solidColorBrush.Opacity > 0.25)
         {
-            CellBackground = Brushes.Green;
+            CellBackground = new SolidColorBrush(greenBrush.Color) { Opacity = solidColorBrush.Opacity - 0.25 };
         }
-        else if (CellBackground != Brushes.Green)
+        else if (CellBackground.Equals(Brushes.White))
         {
-            CellBackground = Brushes.LightGreen;
+            Debug.WriteLine("Masuk");
+            CellBackground = new SolidColorBrush(greenBrush.Color) { Opacity = 1 };
         }
     }
 
@@ -83,19 +87,22 @@ class Cell : INotifyPropertyChanged
 
     public void stepPathVisitedColor()
     {
-        if (CellBackground == Brushes.Cornsilk)
+        SolidColorBrush yellowBrush = new SolidColorBrush(Color.FromRgb(240, 220, 60));
+        if (CellBackground is SolidColorBrush solidColorBrush && solidColorBrush.Color.Equals(yellowBrush.Color) && solidColorBrush.Opacity > 0.25)
         {
-            CellBackground = Brushes.PeachPuff;
+            CellBackground = new SolidColorBrush(yellowBrush.Color) { Opacity = solidColorBrush.Opacity - 0.25 };
         }
-        else if (CellBackground != Brushes.PeachPuff)
+        else if (CellBackground.Equals(Brushes.White))
         {
-            CellBackground = Brushes.Cornsilk;
+            Debug.WriteLine("Masuk");
+            CellBackground = new SolidColorBrush(yellowBrush.Color) { Opacity = 1 };
         }
     }
 
     public void stepPathVisitingColor()
     {
-        CellBackground = Brushes.LightBlue;
+        SolidColorBrush blueBrush = new SolidColorBrush(Color.FromRgb(161, 191, 250));
+        CellBackground = blueBrush;
     }
 
     public string toString()

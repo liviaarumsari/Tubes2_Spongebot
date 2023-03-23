@@ -88,38 +88,11 @@ namespace Spongebot
             }
         }
 
-        private bool isDFS = false;
-        public bool IsDFS
-        {
-            get
-            {
-                return isDFS;
-            }
-            set
-            {
-                isDFS = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsDFS"));
-            }
-        }
-
-        private bool isBFS = true;
-        public bool IsBFS
-        {
-            get
-            {
-                return isBFS;
-            }
-            set
-            {
-                isBFS = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsBFS"));
-            }
-        }
-
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
+            this.Title = "Spongebot";
         }
 
         private void ChooseFileButton_Click(object sender, RoutedEventArgs e)
@@ -279,12 +252,12 @@ namespace Spongebot
                 outputColumn.Visibility = Visibility.Visible;
                 DrawBoard();
                 WarningMessageTreasure = "";
-                RouteLabel.Content = "-";
-                NodesLabel.Content = 0;
-                StepsLabel.Content = 0;
-                ExecutionTimeLabel.Content = "0 ms";
+                //RouteLabel.Content = "-";
+                //NodesLabel.Content = 0;
+                //StepsLabel.Content = 0;
+                //ExecutionTimeLabel.Content = "0 ms";
                 var watch = new System.Diagnostics.Stopwatch();
-                if (isBFS)
+                if ((bool)BFSRadioButton.IsChecked)
                 {
                     watch.Start();
                     

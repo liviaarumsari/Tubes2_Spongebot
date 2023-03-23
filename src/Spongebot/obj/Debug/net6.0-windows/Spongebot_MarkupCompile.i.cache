@@ -4,15 +4,19 @@
 winexe
 C#
 .cs
-D:\ITB Files\Stima\Tubes-2\src\Spongebot\obj\Debug\net6.0-windows\
+C:\Users\livia\OneDrive - Institut Teknologi Bandung\IF\SEM 4\stima\Tubes 02\src\Spongebot\obj\Debug\net6.0-windows\
 Spongebot
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-D:\ITB Files\Stima\Tubes-2\src\Spongebot\App.xaml
+C:\Users\livia\OneDrive - Institut Teknologi Bandung\IF\SEM 4\stima\Tubes 02\src\Spongebot\App.xaml
 11407045341
 
+<<<<<<< HEAD
 15-2102732106
+=======
+16-1084727454
+>>>>>>> 034ae67547cb7298681d0d1b027d0c03e206b954
 194101785492
 MainWindow.xaml;
 

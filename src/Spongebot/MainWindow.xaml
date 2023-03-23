@@ -7,137 +7,140 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280"
         Icon="./Images/logoImg.png">
-
-    <Grid Background="#000">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <!-- Program Name -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="16">
-            <Image Source="./Images/logoImg.png" Width="36" Margin="0 0 12 0"/>
-            <Label Content="Spongebot" FontFamily="Lato Black" FontSize="24" Foreground="#FFF" FontWeight="Bold" VerticalAlignment="Center"/>
-        </StackPanel>
-
-        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid Background="#000">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
+            <!-- Program Name -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="16">
+                <Image Source="./Images/logoImg.png" Width="36" Margin="0 0 12 0"/>
+                <Label Content="Spongebot" FontFamily="Lato Black" FontSize="24" Foreground="#FFF" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
 
-            <!-- Input column -->
-            <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderCardStyle}">
-                <StackPanel Grid.Column="0" Grid.Row="1" Style="{StaticResource StackPanelCardTemplate}" >
-                    <!-- Input file text box -->
-                    <Label Content="File Input" Margin="0 0 0 12" FontWeight="Bold"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Template="{StaticResource ButtonTemplate}" Click="ChooseFileButton_Click" Name="ChooseFileButton" Foreground="#FDFEF3">
-                            <StackPanel Orientation="Horizontal" >
-                                <Image Source="/Images/chooseFileImg.png" Style="{StaticResource ImageButtonStyle}" Margin="0 0 8 0"/>
-                                <TextBlock Text="Choose File" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                        <Label Content="{Binding ChosenFileName}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 12">
-                        <Line  
-                        X1="0" Y1="0"  
-                        X2="80" Y2="0"  
-                        Stroke="#855BE2"  
-                        StrokeThickness="2" />
-                        <Label Content="or" Margin="4, -12" />
-                        <Line  
-                        X1="0" Y1="0"  
-                        X2="80" Y2="0"  
-                        Stroke="#855BE2"  
-                        StrokeThickness="2" />
-                    </StackPanel>
-                    <StackPanel>
-                        <DockPanel>
-                            <Button DockPanel.Dock="Right" Template="{StaticResource ButtonTemplate}" Name="SearchFileButton" Click="SearchFileButton_Click" Foreground="#FDFEF3" BorderThickness="0" FontFamily="Lato" FontWeight="Bold">
-                                <Image Source="/Images/searchImg.png" MaxHeight="20" />
+                <!-- Input column -->
+                <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderCardStyle}">
+                    <StackPanel Grid.Column="0" Grid.Row="1" Style="{StaticResource StackPanelCardTemplate}" >
+                        <!-- Input file text box -->
+                        <Label Content="File Input" Margin="0 0 0 12" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Template="{StaticResource ButtonTemplate}" Click="ChooseFileButton_Click" Name="ChooseFileButton" Foreground="#FDFEF3">
+                                <StackPanel Orientation="Horizontal" >
+                                    <Image Source="/Images/chooseFileImg.png" Style="{StaticResource ImageButtonStyle}" Margin="0 0 8 0"/>
+                                    <TextBlock Text="Choose File" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </StackPanel>
                             </Button>
-                            <TextBox DockPanel.Dock="Left" BorderBrush="#855BE2" SelectionBrush="#6F39E7" Padding="16 8 64 8" Margin="0 0 12 0" Name="InputFileTextBox" BorderThickness="1" FontFamily="Lato" FontSize="16">Input your file name</TextBox>
-                        </DockPanel>
-                        <TextBlock x:Name="InputFileWarning" Text="{Binding WarningMessageSearchFile}" Style="{StaticResource ErrorMessage}" TextWrapping="Wrap" />
+                            <Label Content="{Binding ChosenFileName}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 12">
+                            <Line  
+                        X1="0" Y1="0"  
+                        X2="80" Y2="0"  
+                        Stroke="#855BE2"  
+                        StrokeThickness="2" />
+                            <Label Content="or" Margin="4, -12" />
+                            <Line  
+                        X1="0" Y1="0"  
+                        X2="80" Y2="0"  
+                        Stroke="#855BE2"  
+                        StrokeThickness="2" />
+                        </StackPanel>
+                        <StackPanel>
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Template="{StaticResource ButtonTemplate}" Name="SearchFileButton" Click="SearchFileButton_Click" Foreground="#FDFEF3" BorderThickness="0" FontFamily="Lato" FontWeight="Bold">
+                                    <Image Source="/Images/searchImg.png" MaxHeight="20" />
+                                </Button>
+                                <TextBox DockPanel.Dock="Left" BorderBrush="#855BE2" SelectionBrush="#6F39E7" Padding="16 8 64 8" Margin="0 0 12 0" Name="InputFileTextBox" BorderThickness="1" FontFamily="Lato" FontSize="16">Input your file name</TextBox>
+                            </DockPanel>
+                            <TextBlock x:Name="InputFileWarning" Text="{Binding WarningMessageSearchFile}" Style="{StaticResource ErrorMessage}" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <Button Template="{StaticResource ButtonTemplate}" Content="Visualize" Click="VisualizeButton_Click" Margin="0 16 0 4" Foreground="#FDFEF3" FontFamily="Lato" FontWeight="Bold" FontSize="16" />
+                        <TextBlock Text="{Binding WarningMessageVisualize}" Style="{StaticResource ErrorMessage}" />
                     </StackPanel>
+                </Border>
 
-                    <Button Template="{StaticResource ButtonTemplate}" Content="Visualize" Click="VisualizeButton_Click" Margin="0 16 0 4" Foreground="#FDFEF3" FontFamily="Lato" FontWeight="Bold" FontSize="16" />
-                    <TextBlock Text="{Binding WarningMessageVisualize}" Style="{StaticResource ErrorMessage}" />
-                </StackPanel>
-            </Border>
+                <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderCardStyle}">
+                    <StackPanel Grid.Column="0" Grid.Row="2" Style="{StaticResource StackPanelCardTemplate}" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderCardStyle}">
-                <StackPanel Grid.Column="0" Grid.Row="2" Style="{StaticResource StackPanelCardTemplate}" >
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+                            <!-- Algorithm chooser with two radio buttons: BFS and DFS -->
+                            <StackPanel Orientation="Vertical" Grid.Column="0">
+                                <Label Content="Algorithm" Margin="0 10 0 5"/>
+                                <RadioButton Margin="0 5 5 5" Name="BFSRadioButton" Content="BFS" IsChecked="True" Template="{StaticResource RadioTemplate}"/>
+                                <RadioButton Margin="0 5 0 5" Name="DFSRadioButton" Content="DFS" Template="{StaticResource RadioTemplate}"/>
+                            </StackPanel>
 
-                        <!-- Algorithm chooser with two radio buttons: BFS and DFS -->
-                        <StackPanel Orientation="Vertical" Grid.Column="0">
-                            <Label Content="Algorithm" Margin="0 10 0 5"/>
-                            <RadioButton Margin="0 5 5 5" Name="BFSRadioButton" Content="BFS" IsChecked="{Binding IsBFS}" Template="{StaticResource RadioTemplate}"/>
-                            <RadioButton Margin="0 5 0 5" Name="DFSRadioButton" Content="DFS" IsChecked="{Binding IsDFS}" Template="{StaticResource RadioTemplate}"/>
-                        </StackPanel>
+                            <!-- Time duration input box -->
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="1">
+                                <Label Content="Time interval" Margin="0 10 0 5"/>
+                                <Slider Template="{StaticResource SliderTemplate}" x:Name="TimeIntervalSlider" Minimum="0" Maximum="500" Width="Auto" 
+                                TickFrequency="50" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="TimeIntervalSlider_ValueChanged">
+                                </Slider>
+                            </StackPanel>
+                            <!-- TSP toggle -->
 
-                        <!-- Time duration input box -->
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Grid.Column="1">
-                            <Label Content="Time interval" Margin="0 10 0 5"/>
-                            <Slider Template="{StaticResource SliderTemplate}" x:Name="TimeIntervalSlider" Minimum="0" Maximum="200" Width="Auto" 
-                                TickFrequency="10" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="TimeIntervalSlider_ValueChanged">
-                            </Slider>
-                        </StackPanel>
-                        <!-- TSP toggle -->
-
-                        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0 8">
-                            <CheckBox Name="TSPCheckbox" Content="Travelling Salesman Problem" IsChecked="False" FontFamily="Lato" FontWeight="Bold" FontSize="16"/>
-                        </StackPanel>
-                    </Grid>
-                    <!-- Search Treasure button -->
-                    <Button Template="{StaticResource ButtonTemplate}" 
+                            <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0 8">
+                                <CheckBox Name="TSPCheckbox" Content="Travelling Salesman Problem" IsChecked="False" FontFamily="Lato" FontWeight="Bold" FontSize="16"/>
+                            </StackPanel>
+                        </Grid>
+                        <!-- Search Treasure button -->
+                        <Button Template="{StaticResource ButtonTemplate}" 
                             Name="SearchTreasureButton" Foreground="#FDFEF3" Margin="0 24 0 8" Content="Search treasure!" 
                             FontWeight="Bold" FontFamily="Lato" FontSize="16" Click="SearchTreasureButton_Click" />
-                    <TextBlock Text="{Binding WarningMessageTreasure}" Style="{StaticResource ErrorMessage}" />
-                </StackPanel>
-            </Border>
+                        <TextBlock Text="{Binding WarningMessageTreasure}" Style="{StaticResource ErrorMessage}" />
+                    </StackPanel>
+                </Border>
 
-            <Border x:Name="outputColumn" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Style="{StaticResource BorderCardStyle}" Visibility="Collapsed">
-                <!-- Output column -->
-                <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Orientation="Vertical" Style="{StaticResource StackPanelCardTemplate}" VerticalAlignment="Center" >
-                    <Grid x:Name="boardGrid"></Grid>
-                    <Grid Name="resultOutput" Visibility="Collapsed" Margin="0 16" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <Label Content="Route " />
-                            <Label Content="Nodes " />
-                            <Label Content="Steps " />
-                            <Label Content="Execution Time " />
-                        </StackPanel>
-                        <StackPanel Grid.Column="1">
-                            <Label Name="RouteLabel" FontWeight="Bold"/>
-                            <Label Name="NodesLabel" FontWeight="Bold"/>
-                            <Label Name="StepsLabel" FontWeight="Bold"/>
-                            <Label Name="ExecutionTimeLabel" FontWeight="Bold"/>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Border>
+                <Border x:Name="outputColumn" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Style="{StaticResource BorderCardStyle}" Visibility="Collapsed">
+                    <!-- Output column -->
+                    <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Orientation="Vertical" Style="{StaticResource StackPanelCardTemplate}" VerticalAlignment="Center" >
+                        <Grid x:Name="boardGrid" HorizontalAlignment="Center"></Grid>
+                        <Grid Name="resultOutput" Visibility="Collapsed" Margin="0 16" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto" MaxWidth="400"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Route " Grid.Column="0" Grid.Row="0"/>
+                            <Label Content="Nodes " Grid.Column="0" Grid.Row="1" />
+                            <Label Content="Steps " Grid.Column="0" Grid.Row="2" />
+                            <Label Content="Execution Time " Grid.Column="0" Grid.Row="3" />
+                            <Label Name="RouteLabel" FontWeight="Bold" Grid.Column="1" Grid.Row="0" MaxWidth="400"/>
+                            <Label Name="NodesLabel" FontWeight="Bold" Grid.Column="1" Grid.Row="1" />
+                            <Label Name="StepsLabel" FontWeight="Bold" Grid.Column="1" Grid.Row="2" />
+                            <Label Name="ExecutionTimeLabel" FontWeight="Bold" Grid.Column="1" Grid.Row="3" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </Window>
