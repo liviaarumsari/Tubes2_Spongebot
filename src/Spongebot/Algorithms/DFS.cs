@@ -13,11 +13,16 @@ namespace Spongebot.Algorithms
         private Board board;
         private Cell startCell;
         private List<Cell> treasureCells = new List<Cell>();
-        private Stack<DFSPath> pathS = new Stack<DFSPath>();
+        public string finalRoute = new String("");
+        public int visitedNodes;
+        public int totalSteps ;
 
         public DFS(Board board)
         {
             this.board = board;
+            this.visitedNodes = 0;
+            this.totalSteps = 0;
+            this.finalRoute = "";
             startCell = null!;
             for (int x = 0; x < board.Cells.GetLength(0); x++)
             {
@@ -40,7 +45,7 @@ namespace Spongebot.Algorithms
             }
         }
 
-        private bool cellIsVisited(Cell cell, DFSPath path)
+        private bool cellIsVisited(Cell cell, MazePath path)
         {
             for (int i = 0; i < path.Length; i++)
             {
@@ -59,52 +64,65 @@ namespace Spongebot.Algorithms
             }
             return "U";
         }
-        public async void run()
+        public async Task run(bool isTSP, double timeInterval)
         {
-            DFSPath initialPath = new DFSPath(startCell);
+            board.clearColors();
+
+            this.visitedNodes = 0;
+            this.totalSteps = 0;
+            this.finalRoute = "";
+
+            Stack<MazePath> pathS = new Stack<MazePath>();
+            MazePath initialPath = new MazePath(startCell);
             pathS.Push(initialPath);
+
             bool deadend = true;
             int countVisit = 0;
             while (pathS.Count != 0){
-                DFSPath currentPath = pathS.Pop();
+                MazePath currentPath = pathS.Pop();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
-                currentPath[currentPath.Length - 1].CellBackground = Brushes.Blue;
-                await Task.Delay(TimeSpan.FromMilliseconds(500));
-
-                if (deadend && currentPath!=initialPath){
-                    currentPath[currentPath.Length - 1].CellBackground = Brushes.PeachPuff;
-                    await Task.Delay(TimeSpan.FromMilliseconds(500));
-                }
-
-                if(currentPath[currentPath.Length - 1].CellBackground == Brushes.Cornsilk){
-                    currentPath[currentPath.Length - 1].CellBackground = Brushes.PeachPuff;
-                }else if(currentPath[currentPath.Length - 1].CellBackground != Brushes.PeachPuff){
-                    currentPath[currentPath.Length - 1].CellBackground = Brushes.Cornsilk;
-                }
-                await Task.Delay(TimeSpan.FromMilliseconds(500));
+                currentPath.clearColor();
+                currentPath.stepColor();
+                lastCell.stepPathVisitingColor();
+                await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
 
                 if (currentPath.treasureCount == treasureCells.Count)
                 {
-                    // for (int i = 0; i < currentPath.Length; i++)
-                    // {
-                    //     if (currentPath[i].CellBackground == Brushes.Green)
-                    //     {
+                    string s = new String("");
 
-                    //         currentPath[i].CellBackground = Brushes.DarkGreen;
-                    //     }
-                    //     else if(currentPath[i].CellBackground != Brushes.DarkGreen)
-                    //     {
-                    //         currentPath[i].CellBackground = Brushes.Green;
-                    //     }
-                    //     await Task.Delay(TimeSpan.FromMilliseconds(500));
-                    // }
+                    
                     for (int i = 0; i < currentPath.Length - 2;i++){
-                        string s = route(currentPath[i], currentPath[i + 1]);
-                        Debug.Write(s + " - ");
+                        s += route(currentPath[i], currentPath[i + 1]);
+                        s += "-";
                     }
-                    Debug.WriteLine(route(currentPath[currentPath.Length-2], currentPath[currentPath.Length-1]));
-                    Debug.WriteLine(countVisit);
+                    s+=route(currentPath[currentPath.Length-2], currentPath[currentPath.Length-1]);
+                    
+                    board.clearColors();
+                    for (int i = 0; i < currentPath.Length; i++)
+                        {
+                        currentPath[i].finalPathVisitedColor();
+                        await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+                    }
+                    
+                    this.finalRoute = s;
+                    this.totalSteps = currentPath.Length-1;
+                    this.visitedNodes += countVisit;
+                    Debug.WriteLine("route: "+this.finalRoute);
+                    Debug.WriteLine("steps: "+this.totalSteps);
+                    Debug.WriteLine("node: "+this.visitedNodes);
+                    if (isTSP)
+                    {
+                        MazePath tspPath = new MazePath(TSP(currentPath[currentPath.Length - 1]));
+                        for (int i = 0; i < tspPath.Length; i++)
+                        {
+                        tspPath[i].TSPfinalPathVisitedColor();
+                        await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+                    }
+                    Debug.WriteLine("route after: "+this.finalRoute);
+                    Debug.WriteLine("steps after: "+this.totalSteps);
+                    Debug.WriteLine("node after: "+this.visitedNodes);
+                    }
                     return;
                 }
 
@@ -123,7 +141,7 @@ namespace Spongebot.Algorithms
                     if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
                     {
                         Cell neighbor = board[neighborPosition];
-                        pathS.Push(new DFSPath(currentPath, neighbor));
+                        pathS.Push(new MazePath(currentPath, neighbor));
                         deadend = false;
                     }
                 }
@@ -132,10 +150,70 @@ namespace Spongebot.Algorithms
                 if(deadend){
                     currentPath.prevCells.Pop();
                     Cell previous = currentPath.prevCells.Pop();
-                    pathS.Push(new DFSPath(currentPath, previous));
+                    pathS.Push(new MazePath(currentPath, previous));
                 }
                 countVisit++;
             }
+        }
+
+        public MazePath TSP(Cell lastTreasure){
+            Stack<MazePath> pathS = new Stack<MazePath>();
+            MazePath initialPath = new MazePath(lastTreasure);
+            pathS.Push(initialPath);
+            MazePath currentPath = pathS.Peek();
+
+            bool deadend = true;
+            int countVisit = 0;
+            while (pathS.Count != 0){
+                currentPath = pathS.Pop();
+                Cell lastCell = currentPath[currentPath.Length - 1];
+
+                if (lastCell == startCell)
+                {
+                    string s = new String("-");
+                    for (int i = 0; i < currentPath.Length - 2;i++){
+                        s += route(currentPath[i], currentPath[i + 1]);
+                        s += "-";
+                    }
+                    s+=route(currentPath[currentPath.Length-2], currentPath[currentPath.Length-1]);
+                    Debug.WriteLine("route back: "+s);
+                    Debug.WriteLine("step back: "+(currentPath.Length-1));
+                    this.finalRoute += s;
+                    this.totalSteps += currentPath.Length - 1;
+                    break;
+                    
+                }
+
+                Point[] neighborPositions = new Point[]
+                {
+                    new Point(lastCell.Position.X, lastCell.Position.Y - 1),
+                    new Point(lastCell.Position.X + 1, lastCell.Position.Y),
+                    new Point(lastCell.Position.X, lastCell.Position.Y + 1),
+                    new Point(lastCell.Position.X - 1, lastCell.Position.Y)
+                };
+                
+                //checking neighbors cell
+                deadend = true;
+                foreach (var neighborPosition in neighborPositions)
+                {
+                    if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
+                    {
+                        Cell neighbor = board[neighborPosition];
+                        pathS.Push(new MazePath(currentPath, neighbor));
+                        deadend = false;
+                    }
+                }
+
+                // if deadend then backtrack
+                if(deadend){
+                    currentPath.prevCells.Pop();
+                    Cell previous = currentPath.prevCells.Pop();
+                    pathS.Push(new MazePath(currentPath, previous));
+                }
+                countVisit++;
+            }
+            this.visitedNodes += countVisit;
+            return currentPath;
         }
     }
 }
