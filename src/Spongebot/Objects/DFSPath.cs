@@ -44,10 +44,26 @@ namespace Spongebot.Objects
         private int countTreasures(Cell[] cells)
         {
             int count = 0;
-            foreach (var cell in cells)
-            {
-                if (cell.Type == CellType.Treasure)
-                    count++;
+            Queue<Cell> temp = new Queue<Cell>();
+            foreach (var cell in cells){
+                if (cell.Type == CellType.Treasure){
+                    if(temp.Count==0){
+                        temp.Enqueue(cell);
+                        count++;
+                    }else{
+                        bool dupe = false;
+                        foreach(var tempcell in temp){
+                            if(tempcell==cell){
+                                dupe = true;
+                                break;
+                            }
+                        }
+                        if(!dupe){
+                            temp.Enqueue(cell);
+                            count++;
+                        }
+                    }
+                }
             }
             return count;
         }
@@ -56,5 +72,6 @@ namespace Spongebot.Objects
         {
             get { return path[index]; }
         }
+
     }
 }

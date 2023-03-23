@@ -8,15 +8,43 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Lato-Black.ttf" />
     <None Remove="Fonts\Lato-Bold.ttf" />
     <None Remove="Fonts\Lato-Regular.ttf" />
-    <None Remove="Fonts\YesevaOne-Regular.ttf" />
+    <None Remove="Images\chooseFileImg.png" />
+    <None Remove="Images\logoImg.png" />
+    <None Remove="Images\searchImg.png" />
+    <None Remove="Images\startImg.png" />
+    <None Remove="Images\treasureImg.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\Lato-Black.ttf" />
+    <Resource Include="Images\treasureImg.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Fonts\Lato-Bold.ttf" />
     <Resource Include="Fonts\Lato-Regular.ttf" />
-    <Resource Include="Fonts\YesevaOne-Regular.ttf" />
+    <Resource Include="Images\chooseFileImg.png" />
+    <Resource Include="Images\logoImg.png" />
+    <Resource Include="Images\searchImg.png" />
+    <Resource Include="Images\startImg.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
