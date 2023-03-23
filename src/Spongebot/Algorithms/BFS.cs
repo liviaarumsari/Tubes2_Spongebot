@@ -13,10 +13,15 @@ namespace Spongebot.Algorithms
         private Board board;
         private Cell startCell;
         private List<Cell> treasureCells = new List<Cell>();
-
+        public string finalRoute = new String("");
+        public int visitedNodes;
+        public int totalSteps ;
         public BFS(Board board)
         {
             this.board = board;
+            this.visitedNodes = 0;
+            this.totalSteps = 0;
+            this.finalRoute = "";
             startCell = null!;
             for (int x = 0; x < board.Cells.GetLength(0); x++)
             {
@@ -39,7 +44,7 @@ namespace Spongebot.Algorithms
             }
         }
 
-        private bool cellIsVisited(Cell cell, BFSPath path)
+        private bool cellIsVisited(Cell cell, MazePath path)
         {
             for (int i = 0; i < path.Length; i++)
             {
@@ -49,20 +54,20 @@ namespace Spongebot.Algorithms
             return false;
         }
 
-        public async Task runNonTSP()
+        public async Task runNonTSP(double timeInterval)
         {
             board.clearColors();
 
-            BFSPath initialPath = new BFSPath(startCell);
-            List<BFSPath> completePath = new List<BFSPath> { initialPath };
+            MazePath initialPath = new MazePath(startCell);
+            List<MazePath> completePath = new List<MazePath> { initialPath };
             HashSet<Cell> unvisitedTreasure = new HashSet<Cell>(treasureCells);
 
-            Queue<BFSPath> pathQ = new Queue<BFSPath>();
+            Queue<MazePath> pathQ = new Queue<MazePath>();
             pathQ.Enqueue(initialPath);
 
             while (pathQ.Count != 0)
             {
-                BFSPath currentPath = pathQ.Dequeue();
+                MazePath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
                 foreach (var path in completePath)
@@ -72,7 +77,7 @@ namespace Spongebot.Algorithms
                 currentPath.stepColor();
                 lastCell.stepPathVisitingColor();
 
-                await Task.Delay(TimeSpan.FromMilliseconds(500));
+                await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
 
                 board.clearColors();
 
@@ -82,7 +87,7 @@ namespace Spongebot.Algorithms
                     pathQ.Clear();
                     unvisitedTreasure.Remove(lastCell);
 
-                    currentPath = new BFSPath();
+                    currentPath = new MazePath();
                 }
 
                 if (unvisitedTreasure.Count == 0)
@@ -92,7 +97,7 @@ namespace Spongebot.Algorithms
                         for (int i = 0; i < path.Length; i++)
                         {
                             path[i].finalPathVisitedColor();
-                            await Task.Delay(TimeSpan.FromMilliseconds(500));
+                            await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
                         }
                     }
                     return;
@@ -111,27 +116,27 @@ namespace Spongebot.Algorithms
                     if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
                     {
                         Cell neighbor = board[neighborPosition];
-                        pathQ.Enqueue(new BFSPath(currentPath, neighbor));
+                        pathQ.Enqueue(new MazePath(currentPath, neighbor));
                     }
                 }
             }
         }
 
-        public async Task runTSP()
+        public async Task runTSP(double timeInterval)
         {
             board.clearColors();
-            BFSPath initialPath = new BFSPath(startCell);
+            MazePath initialPath = new MazePath(startCell);
 
-            Queue<BFSPath> pathQ = new Queue<BFSPath>();
+            Queue<MazePath> pathQ = new Queue<MazePath>();
             pathQ.Enqueue(initialPath);
 
             while (pathQ.Count != 0)
             {
-                BFSPath currentPath = pathQ.Dequeue();
+                MazePath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
                 currentPath.stepColor();
-                await Task.Delay(TimeSpan.FromMilliseconds(500));
+                await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
                 currentPath.clearColor();
 
                 if (currentPath.treasureCount == treasureCells.Count)
@@ -139,7 +144,7 @@ namespace Spongebot.Algorithms
                     for (int i = 0; i < currentPath.Length; i++)
                     {
                         currentPath[i].finalPathVisitedColor();
-                        await Task.Delay(TimeSpan.FromMilliseconds(500));
+                        await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
                     }
                     return;
                 }
@@ -159,7 +164,7 @@ namespace Spongebot.Algorithms
                     {
                         hasNeighborToVisit = true;
                         Cell neighbor = board[neighborPosition];
-                        pathQ.Enqueue(new BFSPath(currentPath, neighbor));
+                        pathQ.Enqueue(new MazePath(currentPath, neighbor));
                     }
                 }
 
@@ -168,7 +173,7 @@ namespace Spongebot.Algorithms
                 {
                     currentPath.prevCells.Pop();
                     Cell previous = currentPath.prevCells.Pop();
-                    pathQ.Enqueue(new BFSPath(currentPath, previous));
+                    pathQ.Enqueue(new MazePath(currentPath, previous));
                 }
             }
         }
