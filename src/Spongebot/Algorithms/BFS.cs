@@ -113,7 +113,6 @@ namespace Spongebot.Algorithms
                     unvisitedTreasure.Remove(lastCell);
 
                     currentPath = new MazePath();
-                    Debug.WriteLine($"lastCell: ({lastCell.Position.X}, {lastCell.Position.Y})");
                 }
 
                 if (unvisitedTreasure.Count == 0)
@@ -167,7 +166,10 @@ namespace Spongebot.Algorithms
         public async Task runTSP(double timeInterval)
         {
             board.clearColors();
+
             MazePath initialPath = new MazePath(startCell);
+            List<MazePath> completePath = new List<MazePath>();
+            HashSet<Cell> unvisitedTreasure = new HashSet<Cell>(treasureCells);
 
             Queue<MazePath> pathQ = new Queue<MazePath>();
             pathQ.Enqueue(initialPath);
@@ -182,22 +184,52 @@ namespace Spongebot.Algorithms
                 Cell lastCell = currentPath[currentPath.Length - 1];
                 this.visitedNodes++;
 
+                foreach (var path in completePath)
+                {
+                    path.stepColor();
+                }
                 currentPath.stepColor();
                 lastCell.stepPathVisitingColor();
-                await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
-                currentPath.clearColor();
 
-                if (currentPath.treasureCount == treasureCells.Count && lastCell.Type == CellType.Start)
+                await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+
+                board.clearColors();
+
+                if (unvisitedTreasure.Contains(lastCell) ||
+                    (unvisitedTreasure.Count == 0 && lastCell.Type == CellType.Start))
                 {
-                    this.totalSteps = currentPath.Length;
-                    for (int i = 0; i < currentPath.Length; i++)
+                    completePath.Add(currentPath);
+                    pathQ.Clear();
+                    unvisitedTreasure.Remove(lastCell);
+
+                    currentPath = new MazePath();
+                }
+
+                if (unvisitedTreasure.Count == 0 && lastCell.Type == CellType.Start)
+                {
+                    Cell? previousLastCell = null;
+                    foreach (var path in completePath)
                     {
-                        currentPath[i].finalPathVisitedColor();
-                        await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
-                        if (i > 1)
-                            this.finalRoute += " - ";
-                        if (i > 0)
-                            this.finalRoute += route(currentPath[i - 1], currentPath[i]);
+                        for (int i = 0; i < path.Length; i++)
+                        {
+                            path[i].finalPathVisitedColor();
+                            await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
+                            this.totalSteps++;
+
+                            if (i == 0 && previousLastCell != null)
+                            {
+                                this.finalRoute += route(previousLastCell, path[i]);
+                            }
+                            else if (i != 0)
+                            {
+                                this.finalRoute += route(path[i - 1], path[i]);
+                            }
+
+                            if (!(i == 0 && path == completePath[0]) &&
+                                !(i == path.Length - 1 && path == completePath[completePath.Count - 1]))
+                                this.finalRoute += " - ";
+                        }
+                        previousLastCell = path[path.Length - 1];
                     }
                     return;
                 }
@@ -210,22 +242,13 @@ namespace Spongebot.Algorithms
                     new Point(lastCell.Position.X - 1, lastCell.Position.Y)
                 };
 
-                bool hasNeighborToVisit = false;
                 foreach (var neighborPosition in neighborPositions)
                 {
                     if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
                     {
-                        hasNeighborToVisit = true;
                         Cell neighbor = board[neighborPosition];
                         pathQ.Enqueue(new MazePath(currentPath, neighbor));
                     }
-                }
-
-                if (!hasNeighborToVisit)
-                {
-                    currentPath.prevCells.Pop();
-                    Cell previous = currentPath.prevCells.Pop();
-                    pathQ.Enqueue(new MazePath(currentPath, previous));
                 }
             }
         }
