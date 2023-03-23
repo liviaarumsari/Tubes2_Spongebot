@@ -103,7 +103,7 @@
                         <!-- TSP toggle -->
 
                         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0 8">
-                            <CheckBox Name="TSPCheckbox" Content="Travelling Salesman Problem" IsChecked="False" Click="TSPCheckbox_Click" FontFamily="Lato" FontWeight="Bold" FontSize="16"/>
+                            <CheckBox Name="TSPCheckbox" Content="Travelling Salesman Problem" IsChecked="False" FontFamily="Lato" FontWeight="Bold" FontSize="16"/>
                         </StackPanel>
                     </Grid>
                     <!-- Search Treasure button -->

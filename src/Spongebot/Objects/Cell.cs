@@ -1,6 +1,7 @@
 using Spongebot.Enums;
 using System.ComponentModel;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace Spongebot.Objects;
 
@@ -36,14 +37,53 @@ class Cell : INotifyPropertyChanged
         Position = new Point(x, y);
         if (this.Type == CellType.Wall)
         {
-            cellBackground = Brushes.Black;
             CellBackground = Brushes.Black;
         }
         else
         {
-            cellBackground = Brushes.White;
             CellBackground = Brushes.White;
         }
+    }
+
+    public void clearColor()
+    {
+        if (this.Type == CellType.Wall)
+        {
+            CellBackground = Brushes.Black;
+        }
+        else
+        {
+            CellBackground = Brushes.White;
+        }
+    }
+
+    public void finalPathVisitedColor()
+    {
+        if (CellBackground == Brushes.LightGreen)
+        {
+            CellBackground = Brushes.Green;
+        }
+        else if (CellBackground != Brushes.Green)
+        {
+            CellBackground = Brushes.LightGreen;
+        }
+    }
+
+    public void stepPathVisitedColor()
+    {
+        if (CellBackground == Brushes.Cornsilk)
+        {
+            CellBackground = Brushes.PeachPuff;
+        }
+        else if (CellBackground != Brushes.PeachPuff)
+        {
+            CellBackground = Brushes.Cornsilk;
+        }
+    }
+
+    public void stepPathVisitingColor()
+    {
+        CellBackground = Brushes.LightBlue;
     }
 
     public string toString()

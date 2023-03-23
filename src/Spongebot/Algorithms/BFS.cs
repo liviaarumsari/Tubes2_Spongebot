@@ -51,6 +51,8 @@ namespace Spongebot.Algorithms
 
         public async void runNonTSP()
         {
+            board.clearColors();
+
             BFSPath initialPath = new BFSPath(startCell);
             List<BFSPath> completePath = new List<BFSPath> { initialPath };
             HashSet<Cell> unvisitedTreasure = new HashSet<Cell>(treasureCells);
@@ -63,19 +65,9 @@ namespace Spongebot.Algorithms
                 BFSPath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
-                //for (int i = 0; i < currentPath.Length; i++)
-                //{
-                //    if (currentPath[i].CellBackground == Brushes.Cornsilk)
-                //    {
-                //        currentPath[i].CellBackground = Brushes.PeachPuff;
-                //    }
-                //    else if (currentPath[i].CellBackground != Brushes.PeachPuff)
-                //    {
-                //        currentPath[i].CellBackground = Brushes.Cornsilk;
-                //    }
-                //}
-                //currentPath[currentPath.Length - 1].CellBackground = Brushes.LightBlue;
-                //await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+                currentPath.stepColor();
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
 
                 if (unvisitedTreasure.Contains(lastCell))
                 {
@@ -83,18 +75,11 @@ namespace Spongebot.Algorithms
                     pathQ.Clear();
                     unvisitedTreasure.Remove(lastCell);
 
-                    for (int i = 0; i < currentPath.Length; i++)
-                    {
-                        currentPath[i].CellBackground = Brushes.White;
-                    }
-
+                    currentPath.clearColor();
                     currentPath = new BFSPath();
                 }
-
-                //for (int i = 0; i < currentPath.Length; i++)
-                //{
-                //    currentPath[i].CellBackground = Brushes.White;
-                //}
+                
+                currentPath.clearColor();
 
                 if (unvisitedTreasure.Count == 0)
                 {
@@ -102,14 +87,7 @@ namespace Spongebot.Algorithms
                     {
                         for (int i = 0; i < path.Length; i++)
                         {
-                            if (path[i].CellBackground == Brushes.Green)
-                            {
-                                path[i].CellBackground = Brushes.DarkGreen;
-                            }
-                            else if (path[i].CellBackground != Brushes.DarkGreen)
-                            {
-                                path[i].CellBackground = Brushes.Green;
-                            }
+                            path[i].finalPathVisitedColor();
                             await Task.Delay(TimeSpan.FromMilliseconds(500));
                         }
                     }
@@ -137,6 +115,7 @@ namespace Spongebot.Algorithms
 
         public async void runTSP()
         {
+            board.clearColors();
             BFSPath initialPath = new BFSPath(startCell);
 
             Queue<BFSPath> pathQ = new Queue<BFSPath>();
@@ -147,37 +126,15 @@ namespace Spongebot.Algorithms
                 BFSPath currentPath = pathQ.Dequeue();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
-                for (int i = 0; i < currentPath.Length; i++)
-                {
-                    if (currentPath[i].CellBackground == Brushes.Cornsilk)
-                    {
-                        currentPath[i].CellBackground = Brushes.PeachPuff;
-                    }
-                    else if (currentPath[i].CellBackground != Brushes.PeachPuff)
-                    {
-                        currentPath[i].CellBackground = Brushes.Cornsilk;
-                    }
-                }
-                currentPath[currentPath.Length - 1].CellBackground = Brushes.LightBlue;
+                currentPath.stepColor();
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
-
-                for (int i = 0; i < currentPath.Length; i++)
-                {
-                    currentPath[i].CellBackground = Brushes.White;
-                }
+                currentPath.clearColor();
 
                 if (currentPath.treasureCount == treasureCells.Count)
                 {
                     for (int i = 0; i < currentPath.Length; i++)
                     {
-                        if (currentPath[i].CellBackground == Brushes.Green)
-                        {
-                            currentPath[i].CellBackground = Brushes.DarkGreen;
-                        }
-                        else if (currentPath[i].CellBackground != Brushes.DarkGreen)
-                        {
-                            currentPath[i].CellBackground = Brushes.Green;
-                        }
+                        currentPath[i].finalPathVisitedColor();
                         await Task.Delay(TimeSpan.FromMilliseconds(500));
                     }
                     return;

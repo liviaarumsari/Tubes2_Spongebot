@@ -6,6 +6,7 @@ using Spongebot.IO;
 using Spongebot.Objects;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -103,20 +104,6 @@ namespace Spongebot
             }
         }
 
-        private bool isTSP = false;
-        public bool IsTSP
-        {
-            get
-            {
-                return isTSP;
-            }
-            set
-            {
-                isTSP = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsTSP"));
-            }
-        }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -208,7 +195,7 @@ namespace Spongebot
 
             int n_column = board.Cells.GetLength(0);
             int n_row = board.Cells.GetLength(1);
-            var gridLen = n_column > n_row ? 400/n_column : 400/n_row;
+            var gridLen = n_column > n_row ? 400 / n_column : 400 / n_row;
 
             // add rows and columns to the grid
             for (int y = 0; y < n_row; y++)
@@ -279,14 +266,9 @@ namespace Spongebot
             timeInterval = TimeIntervalSlider.Value;
         }
 
-        private void TSPCheckbox_Click(object sender, RoutedEventArgs e)
-        {
-            IsTSP = !IsTSP;
-        }
-
         private void SearchTreasureButton_Click(object sender, RoutedEventArgs e)
         {
-            if(board != null)
+            if (board != null)
             {
                 outputColumn.Visibility = Visibility.Visible;
                 DrawBoard();
@@ -295,13 +277,22 @@ namespace Spongebot
                 {
                     // Ambil attr IsTSP, timeInterval
                     BFS bfs = new BFS(board);
-                    bfs.runTSP();
+                    if (TSPCheckbox.IsChecked == true)
+                    {
+                        bfs.runTSP();
+                        Debug.WriteLine("TSP");
+                    }
+                    else
+                    {
+                        bfs.runNonTSP();
+                        Debug.WriteLine("Non TSP");
+                    }
                     // Set output Result
                     // RouteLabel.Content = 
                     //NodesLabel.Content =
                     //StepsLabel.Content =
                     //ExecutionTimeLabel.Content =
-            
+
                 }
                 else
                 {

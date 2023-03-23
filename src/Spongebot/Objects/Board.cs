@@ -34,6 +34,18 @@ class Board
         Debug.WriteLine("");
     }
 
+    public void clearColors()
+    {
+        for (int y = 0; y < Cells.GetLength(1); y++)
+        {
+            for (int x = 0; x < Cells.GetLength(0); x++)
+            {
+                if (Cells[x, y].Type != CellType.Wall)
+                    Cells[x, y].clearColor();
+            }
+        }
+    }
+
     public bool isValidPosition(int x, int y)
     {
         return x < Cells.GetLength(0) && x >= 0 && y < Cells.GetLength(1) && y >= 0;

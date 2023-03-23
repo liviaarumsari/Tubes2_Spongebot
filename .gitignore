@@ -99,6 +99,7 @@ ClientBin/
 
 .vs/
 **/.vs/
+**/obj/
 
 *.publishsettings
 

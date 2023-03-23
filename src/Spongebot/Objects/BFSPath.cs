@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Spongebot.Enums;
 
 namespace Spongebot.Objects
@@ -54,6 +55,23 @@ namespace Spongebot.Objects
                     count++;
             }
             return count;
+        }
+
+        public void stepColor()
+        {
+            foreach (var cell in path)
+            {
+                cell.stepPathVisitedColor();
+            }
+            path[Length - 1].stepPathVisitingColor();
+        }
+
+        public void clearColor()
+        {
+            foreach (var cell in path)
+            {
+                cell.clearColor();
+            }
         }
 
         public Cell this[int index]
