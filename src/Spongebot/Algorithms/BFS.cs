@@ -13,7 +13,6 @@ namespace Spongebot.Algorithms
         private Board board;
         private Cell startCell;
         private List<Cell> treasureCells = new List<Cell>();
-        private Queue<BFSPath> pathQ = new Queue<BFSPath>();
 
         public BFS(Board board)
         {
@@ -50,9 +49,97 @@ namespace Spongebot.Algorithms
             return false;
         }
 
-        public async void run()
+        public async void runNonTSP()
         {
             BFSPath initialPath = new BFSPath(startCell);
+            List<BFSPath> completePath = new List<BFSPath> { initialPath };
+            HashSet<Cell> unvisitedTreasure = new HashSet<Cell>(treasureCells);
+
+            Queue<BFSPath> pathQ = new Queue<BFSPath>();
+            pathQ.Enqueue(initialPath);
+
+            while (pathQ.Count != 0)
+            {
+                BFSPath currentPath = pathQ.Dequeue();
+                Cell lastCell = currentPath[currentPath.Length - 1];
+
+                //for (int i = 0; i < currentPath.Length; i++)
+                //{
+                //    if (currentPath[i].CellBackground == Brushes.Cornsilk)
+                //    {
+                //        currentPath[i].CellBackground = Brushes.PeachPuff;
+                //    }
+                //    else if (currentPath[i].CellBackground != Brushes.PeachPuff)
+                //    {
+                //        currentPath[i].CellBackground = Brushes.Cornsilk;
+                //    }
+                //}
+                //currentPath[currentPath.Length - 1].CellBackground = Brushes.LightBlue;
+                //await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+                if (unvisitedTreasure.Contains(lastCell))
+                {
+                    completePath.Add(currentPath);
+                    pathQ.Clear();
+                    unvisitedTreasure.Remove(lastCell);
+
+                    for (int i = 0; i < currentPath.Length; i++)
+                    {
+                        currentPath[i].CellBackground = Brushes.White;
+                    }
+
+                    currentPath = new BFSPath();
+                }
+
+                //for (int i = 0; i < currentPath.Length; i++)
+                //{
+                //    currentPath[i].CellBackground = Brushes.White;
+                //}
+
+                if (unvisitedTreasure.Count == 0)
+                {
+                    foreach (var path in completePath)
+                    {
+                        for (int i = 0; i < path.Length; i++)
+                        {
+                            if (path[i].CellBackground == Brushes.Green)
+                            {
+                                path[i].CellBackground = Brushes.DarkGreen;
+                            }
+                            else if (path[i].CellBackground != Brushes.DarkGreen)
+                            {
+                                path[i].CellBackground = Brushes.Green;
+                            }
+                            await Task.Delay(TimeSpan.FromMilliseconds(500));
+                        }
+                    }
+                    return;
+                }
+
+                Point[] neighborPositions = new Point[]
+                {
+                    new Point(lastCell.Position.X, lastCell.Position.Y - 1),
+                    new Point(lastCell.Position.X + 1, lastCell.Position.Y),
+                    new Point(lastCell.Position.X, lastCell.Position.Y + 1),
+                    new Point(lastCell.Position.X - 1, lastCell.Position.Y)
+                };
+
+                foreach (var neighborPosition in neighborPositions)
+                {
+                    if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
+                    {
+                        Cell neighbor = board[neighborPosition];
+                        pathQ.Enqueue(new BFSPath(currentPath, neighbor));
+                    }
+                }
+            }
+        }
+
+        public async void runTSP()
+        {
+            BFSPath initialPath = new BFSPath(startCell);
+
+            Queue<BFSPath> pathQ = new Queue<BFSPath>();
             pathQ.Enqueue(initialPath);
 
             while (pathQ.Count != 0)
@@ -105,10 +192,8 @@ namespace Spongebot.Algorithms
                 };
 
                 bool hasNeighborToVisit = false;
-                Debug.WriteLine("\n" + lastCell.Position.X + " " + lastCell.Position.Y);
                 foreach (var neighborPosition in neighborPositions)
                 {
-                    Debug.WriteLine(neighborPosition.X + " " + neighborPosition.Y);
                     if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
                     {
                         hasNeighborToVisit = true;
@@ -117,6 +202,7 @@ namespace Spongebot.Algorithms
                     }
                 }
 
+                // FIX IF VISITS NEIGHBOR
                 if (!hasNeighborToVisit)
                 {
                     currentPath.prevCells.Pop();
