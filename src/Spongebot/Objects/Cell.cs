@@ -69,6 +69,18 @@ class Cell : INotifyPropertyChanged
         }
     }
 
+    public void TSPfinalPathVisitedColor()
+    {
+        if (CellBackground == Brushes.Aquamarine)
+        {
+            CellBackground = Brushes.MediumAquamarine;
+        }
+        else if (CellBackground != Brushes.MediumAquamarine)
+        {
+            CellBackground = Brushes.Aquamarine;
+        }
+    }
+
     public void stepPathVisitedColor()
     {
         if (CellBackground == Brushes.Cornsilk)
