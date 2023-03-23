@@ -17,6 +17,8 @@ namespace Spongebot.Algorithms
         public int visitedNodes;
         public int totalSteps ;
 
+        const int finalPathIntervalTime = 300;
+
         public DFS(Board board)
         {
             this.board = board;
@@ -102,7 +104,7 @@ namespace Spongebot.Algorithms
                     for (int i = 0; i < currentPath.Length; i++)
                         {
                         currentPath[i].finalPathVisitedColor();
-                        await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+                        await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
                     }
                     
                     this.finalRoute = s;
@@ -117,7 +119,7 @@ namespace Spongebot.Algorithms
                         for (int i = 0; i < tspPath.Length; i++)
                         {
                         tspPath[i].TSPfinalPathVisitedColor();
-                        await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+                        await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
                     }
                     Debug.WriteLine("route after: "+this.finalRoute);
                     Debug.WriteLine("steps after: "+this.totalSteps);
