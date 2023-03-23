@@ -13,14 +13,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Spongebot
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private Board? board;
@@ -87,21 +82,21 @@ namespace Spongebot
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WarningMessageTreasure"));
             }
         }
-
+        // Main entry-point
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
             this.Title = "Spongebot";
         }
-
+        // Click Event Handler for Choose File Button
         private void ChooseFileButton_Click(object sender, RoutedEventArgs e)
         {
             string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string deafultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\"));
+            string defaultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\"));
 
             OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.InitialDirectory = deafultPath;
+            fileDialog.InitialDirectory = defaultPath;
             fileDialog.Filter = "Maze config file | *.txt";
             fileDialog.Title = "Please pick your maze config file";
 
@@ -133,12 +128,11 @@ namespace Spongebot
                 }
             }
         }
-
+        // Event handler for Search File Button
         private void SearchFileButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // initialize your board object here
                 string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 string configPath = System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\", InputFileTextBox.Text);
                 configFile = new FileIO(System.IO.Path.GetFullPath(configPath), InputFileTextBox.Text);
@@ -162,7 +156,7 @@ namespace Spongebot
                 configFile = null;
             }
         }
-
+        // Click event handler for Visualize Button
         private void VisualizeButton_Click(object sender, RoutedEventArgs e)
         {
             if (configFile == null)
@@ -171,15 +165,16 @@ namespace Spongebot
             }
             else
             {
+                // Open output card and show board
                 WarningMessageVisualize = "";
                 outputColumn.Visibility = Visibility.Visible;
                 DrawBoard();
             }
         }
-
+        // Show board from the file input
         private void DrawBoard()
         {
-            // clear the grid
+            // Clear grid
             boardGrid.Children.Clear();
             boardGrid.RowDefinitions.Clear();
             boardGrid.ColumnDefinitions.Clear();
@@ -188,7 +183,7 @@ namespace Spongebot
             int n_row = board.Cells.GetLength(1);
             var gridLen = n_column > n_row ? 400 / n_column : 400 / n_row;
 
-            // add rows and columns to the grid
+            // Add rows and columns definition based on file input
             for (int y = 0; y < n_row; y++)
             {
                 RowDefinition gridRow = new RowDefinition();
@@ -202,17 +197,21 @@ namespace Spongebot
                 boardGrid.ColumnDefinitions.Add(gridCol);
             }
 
-            // add cells to the grid
+            // Add cells to the grid
             for (int y = 0; y < n_row; y++)
             {
                 for (int x = 0; x < n_column; x++)
                 {
                     Cell cell = board.Cells[x, y];
                     Border border = new Border();
+
+                    // Bind border background property to cellBackground
                     border.DataContext = cell;
-                    border.SetBinding(Border.BackgroundProperty, new Binding("CellBackground")); // Bind Border to Cell's CellBackground property
+                    border.SetBinding(Border.BackgroundProperty, new Binding("CellBackground")); 
                     border.BorderBrush = Brushes.Transparent;
                     border.Margin = new Thickness(1);
+
+                    // Set image for start cell
                     if (cell.Type == CellType.Start)
                     {
                         System.Windows.Controls.Image startImage = new System.Windows.Controls.Image();
@@ -223,6 +222,7 @@ namespace Spongebot
                         Grid.SetRow(startImage, y);
                         border.Child = startImage;
                     }
+                    // Set image for treasure cell
                     else if (cell.Type == CellType.Treasure)
                     {
                         System.Windows.Controls.Image treasureImage = new System.Windows.Controls.Image();
@@ -233,18 +233,19 @@ namespace Spongebot
                         Grid.SetRow(treasureImage, y);
                         border.Child = treasureImage;
                     }
+                    // Add cell grid to the boardGrid
                     Grid.SetColumn(border, x);
                     Grid.SetRow(border, y);
                     boardGrid.Children.Add(border);
                 }
             }
         }
-
+        // Value changed event handler for time interval slider
         private void TimeIntervalSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             timeInterval = TimeIntervalSlider.Value;
         }
-
+        // Click handler for search treasure button
         private async void SearchTreasureButton_Click(object sender, RoutedEventArgs e)
         {
             if (board != null)
@@ -252,12 +253,9 @@ namespace Spongebot
                 outputColumn.Visibility = Visibility.Visible;
                 DrawBoard();
                 WarningMessageTreasure = "";
-                //RouteLabel.Content = "-";
-                //NodesLabel.Content = 0;
-                //StepsLabel.Content = 0;
-                //ExecutionTimeLabel.Content = "0 ms";
                 var watch = new System.Diagnostics.Stopwatch();
-                if ((bool)BFSRadioButton.IsChecked)
+                // BFS Algorithm
+                if (BFSRadioButton.IsChecked == true)
                 {
                     watch.Start();
                     
@@ -272,12 +270,13 @@ namespace Spongebot
                         await bfs.runNonTSP(timeInterval);
                     }
                     watch.Stop();
-                    
+                    // Set output result
                     RouteLabel.Content = bfs.finalRoute;
                     NodesLabel.Content = bfs.visitedNodes;
                     StepsLabel.Content = bfs.totalSteps;
                     ExecutionTimeLabel.Content = watch.ElapsedMilliseconds + " ms";
                 }
+                // DFS Algorithm
                 else
                 {
                     watch.Start();
@@ -304,6 +303,7 @@ namespace Spongebot
                 }
                 resultOutput.Visibility = Visibility.Visible;
             }
+            // Error handling if board wasn't initialized
             else
             {
                 WarningMessageTreasure = "Please input and visualize your file first!";

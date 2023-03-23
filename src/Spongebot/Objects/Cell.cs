@@ -68,20 +68,7 @@ class Cell : INotifyPropertyChanged
         }
         else if (CellBackground.Equals(Brushes.White))
         {
-            Debug.WriteLine("Masuk");
             CellBackground = new SolidColorBrush(greenBrush.Color) { Opacity = 1 };
-        }
-    }
-
-    public void TSPfinalPathVisitedColor()
-    {
-        if (CellBackground == Brushes.Aquamarine)
-        {
-            CellBackground = Brushes.MediumAquamarine;
-        }
-        else if (CellBackground != Brushes.MediumAquamarine)
-        {
-            CellBackground = Brushes.Aquamarine;
         }
     }
 
@@ -94,7 +81,6 @@ class Cell : INotifyPropertyChanged
         }
         else if (CellBackground.Equals(Brushes.White))
         {
-            Debug.WriteLine("Masuk");
             CellBackground = new SolidColorBrush(yellowBrush.Color) { Opacity = 1 };
         }
     }

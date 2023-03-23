@@ -118,7 +118,7 @@ namespace Spongebot.Algorithms
                         MazePath tspPath = new MazePath(TSP(currentPath[currentPath.Length - 1]));
                         for (int i = 0; i < tspPath.Length; i++)
                         {
-                        tspPath[i].TSPfinalPathVisitedColor();
+                        tspPath[i].finalPathVisitedColor();
                         await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
                     }
                     Debug.WriteLine("route after: "+this.finalRoute);
