@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Windows.Media;
+using System.Diagnostics;
 
 namespace Spongebot.Algorithms
 {
@@ -48,38 +49,62 @@ namespace Spongebot.Algorithms
             }
             return false;
         }
-
+        private string route(Cell cell1, Cell cell2){
+            if(cell1.Position.X==cell2.Position.X-1){
+                return "R";
+            }else if (cell1.Position.X==cell2.Position.X+1){
+                return "L";
+            }else if(cell1.Position.Y==cell2.Position.Y-1){
+                return "D";
+            }
+            return "U";
+        }
         public async void run()
         {
             DFSPath initialPath = new DFSPath(startCell);
             pathS.Push(initialPath);
-            
+            bool deadend = true;
+            int countVisit = 0;
             while (pathS.Count != 0){
-                bool deadend = true;
                 DFSPath currentPath = pathS.Pop();
                 Cell lastCell = currentPath[currentPath.Length - 1];
-   
-                if(currentPath[currentPath.Length - 1].CellBackground == Brushes.Cornsilk){currentPath[currentPath.Length - 1].CellBackground = Brushes.PeachPuff;
-                }else{
+
+                currentPath[currentPath.Length - 1].CellBackground = Brushes.Blue;
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+                if (deadend && currentPath!=initialPath){
+                    currentPath[currentPath.Length - 1].CellBackground = Brushes.PeachPuff;
+                    await Task.Delay(TimeSpan.FromMilliseconds(500));
+                }
+
+                if(currentPath[currentPath.Length - 1].CellBackground == Brushes.Cornsilk){
+                    currentPath[currentPath.Length - 1].CellBackground = Brushes.PeachPuff;
+                }else if(currentPath[currentPath.Length - 1].CellBackground != Brushes.PeachPuff){
                     currentPath[currentPath.Length - 1].CellBackground = Brushes.Cornsilk;
                 }
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
 
                 if (currentPath.treasureCount == treasureCells.Count)
                 {
-                    for (int i = 0; i < currentPath.Length; i++)
-                    {
-                        if (currentPath[i].CellBackground == Brushes.Green)
-                        {
+                    // for (int i = 0; i < currentPath.Length; i++)
+                    // {
+                    //     if (currentPath[i].CellBackground == Brushes.Green)
+                    //     {
 
-                            currentPath[i].CellBackground = Brushes.DarkGreen;
-                        }
-                        else if(currentPath[i].CellBackground != Brushes.DarkGreen)
-                        {
-                            currentPath[i].CellBackground = Brushes.Green;
-                        }
-                        await Task.Delay(TimeSpan.FromMilliseconds(500));
+                    //         currentPath[i].CellBackground = Brushes.DarkGreen;
+                    //     }
+                    //     else if(currentPath[i].CellBackground != Brushes.DarkGreen)
+                    //     {
+                    //         currentPath[i].CellBackground = Brushes.Green;
+                    //     }
+                    //     await Task.Delay(TimeSpan.FromMilliseconds(500));
+                    // }
+                    for (int i = 0; i < currentPath.Length - 2;i++){
+                        string s = route(currentPath[i], currentPath[i + 1]);
+                        Debug.Write(s + " - ");
                     }
+                    Debug.WriteLine(route(currentPath[currentPath.Length-2], currentPath[currentPath.Length-1]));
+                    Debug.WriteLine(countVisit);
                     return;
                 }
 
@@ -90,7 +115,9 @@ namespace Spongebot.Algorithms
                     new Point(lastCell.Position.X + 1, lastCell.Position.Y),
                     new Point(lastCell.Position.X, lastCell.Position.Y - 1)
                 };
-
+                
+                //checking neighbors cell
+                deadend = true;
                 foreach (var neighborPosition in neighborPositions)
                 {
                     if (board.isValidPosition(neighborPosition) && !cellIsVisited(board[neighborPosition], currentPath) && board[neighborPosition].Type != CellType.Wall)
@@ -100,12 +127,14 @@ namespace Spongebot.Algorithms
                         deadend = false;
                     }
                 }
+
+                // if deadend then backtrack
                 if(deadend){
                     currentPath.prevCells.Pop();
                     Cell previous = currentPath.prevCells.Pop();
                     pathS.Push(new DFSPath(currentPath, previous));
                 }
-
+                countVisit++;
             }
         }
     }
