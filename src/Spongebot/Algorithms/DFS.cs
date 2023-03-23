@@ -77,7 +77,7 @@ namespace Spongebot.Algorithms
             pathS.Push(initialPath);
 
             bool deadend = true;
-            int countVisit = 0;
+            int countVisit = 1;
             while (pathS.Count != 0){
                 MazePath currentPath = pathS.Pop();
                 Cell lastCell = currentPath[currentPath.Length - 1];
