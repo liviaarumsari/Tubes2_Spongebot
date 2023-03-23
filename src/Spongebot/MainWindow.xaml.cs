@@ -88,7 +88,19 @@ namespace Spongebot
             }
         }
 
-        public bool IsDFS = false;
+        private bool isDFS = false;
+        public bool IsDFS
+        {
+            get
+            {
+                return isDFS;
+            }
+            set
+            {
+                isDFS = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsDFS"));
+            }
+        }
 
         private bool isBFS = true;
         public bool IsBFS
@@ -134,14 +146,17 @@ namespace Spongebot
                 catch (FileNotFoundException ex)
                 {
                     WarningMessageSearchFile = ex.Message + " Please enter a valid file.";
+                    configFile = null;
                 }
                 catch (InvalidFileFormatException ex)
                 {
                     WarningMessageSearchFile = ex.Message + " Please fix the config file format.";
+                    configFile = null;
                 }
                 catch (Exception ex)
                 {
                     WarningMessageSearchFile = ex.Message;
+                    configFile = null;
                 }
             }
         }
@@ -161,14 +176,17 @@ namespace Spongebot
             catch (FileNotFoundException ex)
             {
                 WarningMessageSearchFile = ex.Message + " Please enter a valid file.";
+                configFile = null;
             }
             catch (InvalidFileFormatException ex)
             {
                 WarningMessageSearchFile = ex.Message + " Please fix the config file format.";
+                configFile = null;
             }
             catch (Exception ex)
             {
                 WarningMessageSearchFile = ex.Message;
+                configFile = null;
             }
         }
 
@@ -249,18 +267,6 @@ namespace Spongebot
             }
         }
 
-        private void BFSRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            isBFS = true;
-            IsDFS = !isBFS;
-        }
-
-        private void DFSRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            isBFS = false;
-            IsDFS = !isBFS;
-        }
-
         private void TimeIntervalSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             timeInterval = TimeIntervalSlider.Value;
@@ -285,7 +291,6 @@ namespace Spongebot
                     else
                     {
                         await bfs.runNonTSP(timeInterval);
-                        Debug.WriteLine("Non TSP");
                     }
                     // Set output Result
                     // RouteLabel.Content = 

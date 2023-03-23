@@ -136,10 +136,11 @@ namespace Spongebot.Algorithms
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
                 currentPath.stepColor();
-                await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+                lastCell.stepPathVisitingColor();
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
                 currentPath.clearColor();
 
-                if (currentPath.treasureCount == treasureCells.Count)
+                if (currentPath.treasureCount == treasureCells.Count && lastCell.Type == CellType.Start)
                 {
                     for (int i = 0; i < currentPath.Length; i++)
                     {
@@ -168,7 +169,6 @@ namespace Spongebot.Algorithms
                     }
                 }
 
-                // FIX IF VISITS NEIGHBOR
                 if (!hasNeighborToVisit)
                 {
                     currentPath.prevCells.Pop();
