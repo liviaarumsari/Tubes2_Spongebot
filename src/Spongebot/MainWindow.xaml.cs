@@ -279,12 +279,12 @@ namespace Spongebot
                     BFS bfs = new BFS(board);
                     if (TSPCheckbox.IsChecked == true)
                     {
-                        await bfs.runTSP();
+                        await bfs.runTSP(timeInterval);
                         Debug.WriteLine("TSP");
                     }
                     else
                     {
-                        await bfs.runNonTSP();
+                        await bfs.runNonTSP(timeInterval);
                         Debug.WriteLine("Non TSP");
                     }
                     // Set output Result
@@ -296,7 +296,17 @@ namespace Spongebot
                 }
                 else
                 {
-                    //Jalanin DFS
+                    DFS DFS = new DFS(board);
+                    if (TSPCheckbox.IsChecked == true)
+                    {
+                        await DFS.run(true, timeInterval);
+                        Debug.WriteLine("TSP");
+                    }
+                    else
+                    {
+                        await DFS.run(false,timeInterval);
+                        Debug.WriteLine("Non TSP");
+                    }
                 }
                 resultOutput.Visibility = Visibility.Visible;
             }
@@ -304,11 +314,7 @@ namespace Spongebot
             {
                 WarningMessageTreasure = "Please input and visualize your file first!";
             }
-            //if (board != null)
-            //{
-            //    DFS dfs = new DFS(board);
-            //    dfs.run();
-            //}
+
         }
     }
 }
