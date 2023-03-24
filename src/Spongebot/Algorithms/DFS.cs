@@ -94,7 +94,7 @@ namespace Spongebot.Algorithms
                     string s = new String("");                    
                     for (int i = 0; i < currentPath.Length - 2;i++){
                         s += route(currentPath[i], currentPath[i + 1]);
-                        s += "-";
+                        s += " - ";
                     }
                     s+=route(currentPath[currentPath.Length-2], currentPath[currentPath.Length-1]);
                     
@@ -161,18 +161,16 @@ namespace Spongebot.Algorithms
                 currentPath = pathS.Pop();
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
-                if (lastCell == startCell)
-                {
-                    string s = new String("-");
+                if (lastCell == startCell){
+                    string s = new String(" - ");
                     for (int i = 0; i < currentPath.Length - 2;i++){
                         s += route(currentPath[i], currentPath[i + 1]);
-                        s += "-";
+                        s += " - ";
                     }
                     s+=route(currentPath[currentPath.Length-2], currentPath[currentPath.Length-1]);
                     this.finalRoute += s;
                     this.totalSteps += currentPath.Length - 1;
                     break;
-                    
                 }
 
                 Point[] neighborPositions = new Point[]
@@ -204,7 +202,11 @@ namespace Spongebot.Algorithms
                 countVisit++;
             }
             this.visitedNodes += countVisit;
-            return currentPath;
+            MazePath tspPath = new MazePath();
+            for (int i = 1; i < currentPath.Length;i++){
+                tspPath = new MazePath(tspPath, currentPath[i]);
+            }
+            return tspPath;
         }
     }
 }
