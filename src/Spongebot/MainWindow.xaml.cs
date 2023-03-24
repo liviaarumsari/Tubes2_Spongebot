@@ -35,6 +35,8 @@ namespace Spongebot
             }
             set
             {
+                SolidColorBrush redBrush = new SolidColorBrush(Color.FromRgb(225, 118, 90));
+                InputFileWarning.Foreground = redBrush;
                 warningMessageSearchFile = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WarningMessageSearchFile"));
             }
