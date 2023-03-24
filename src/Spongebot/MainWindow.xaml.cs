@@ -93,7 +93,7 @@ namespace Spongebot
         private void ChooseFileButton_Click(object sender, RoutedEventArgs e)
         {
             string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string defaultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\"));
+            string defaultPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentDirectory, @"..\test\"));
 
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.InitialDirectory = defaultPath;
@@ -134,7 +134,7 @@ namespace Spongebot
             try
             {
                 string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string configPath = System.IO.Path.Combine(currentDirectory, @"..\..\..\..\..\test\", InputFileTextBox.Text);
+                string configPath = System.IO.Path.Combine(currentDirectory, @"..\test\", InputFileTextBox.Text);
                 configFile = new FileIO(System.IO.Path.GetFullPath(configPath), InputFileTextBox.Text);
                 WarningMessageSearchFile = "File successfully found!";
                 InputFileWarning.Foreground = Brushes.White;
