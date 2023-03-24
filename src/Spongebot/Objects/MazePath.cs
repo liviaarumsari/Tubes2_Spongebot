@@ -7,7 +7,7 @@ namespace Spongebot.Objects
 {
     internal class MazePath
     {
-        private Cell[] path;
+        public Cell[] path;
         public Stack<Cell> prevCells = new Stack<Cell>();
         public int Length {
             get { return path.Length; }
