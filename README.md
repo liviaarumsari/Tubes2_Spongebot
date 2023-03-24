@@ -38,7 +38,7 @@ $ cd src/Spongebot
 ```
 2. Build the solution
 ```sh 
-$ dotnet build
+$ dotnet build Spongebot.csproj
 ```
 3. Your build result will be in the 'bin' folder
 
