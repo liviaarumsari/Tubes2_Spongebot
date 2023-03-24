@@ -239,6 +239,10 @@ namespace Spongebot
                     boardGrid.Children.Add(border);
                 }
             }
+            RouteLabel.Content = "-";
+            NodesLabel.Content = 0;
+            StepsLabel.Content = 0;
+            ExecutionTimeLabel.Content = "0 ms";
         }
         // Value changed event handler for time interval slider
         private void TimeIntervalSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -250,6 +254,9 @@ namespace Spongebot
         {
             if (board != null)
             {
+                NodesLabel.Content = 0;
+                StepsLabel.Content = 0;
+                ExecutionTimeLabel.Content = "0 ms";
                 outputColumn.Visibility = Visibility.Visible;
                 DrawBoard();
                 WarningMessageTreasure = "";
@@ -258,12 +265,11 @@ namespace Spongebot
                 if (BFSRadioButton.IsChecked == true)
                 {
                     watch.Start();
-                    
+                    RouteLabel.Content = "Searching...";
                     BFS bfs = new BFS(board);
                     if (TSPCheckbox.IsChecked == true)
                     {
                         await bfs.runTSP(timeInterval);
-                        Debug.WriteLine("TSP");
                     }
                     else
                     {
@@ -279,22 +285,19 @@ namespace Spongebot
                 // DFS Algorithm
                 else
                 {
+                    RouteLabel.Content = "Searching...";
                     watch.Start();
-
                     DFS DFS = new DFS(board);
                     if (TSPCheckbox.IsChecked == true)
                     {
                         await DFS.run(true, timeInterval);
-                        Debug.WriteLine("TSP");
                     }
                     else
                     {
                         await DFS.run(false, timeInterval);
-                        Debug.WriteLine("Non TSP");
                     }
                     watch.Stop();
 
-                    Debug.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms");
                     // Set output Result
                     RouteLabel.Content = DFS.finalRoute;
                     NodesLabel.Content = DFS.visitedNodes;
