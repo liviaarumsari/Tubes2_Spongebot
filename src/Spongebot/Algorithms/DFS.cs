@@ -188,10 +188,10 @@ namespace Spongebot.Algorithms
 
                 Point[] neighborPositions = new Point[]
                 {
-                    new Point(lastCell.Position.X, lastCell.Position.Y - 1),
-                    new Point(lastCell.Position.X + 1, lastCell.Position.Y),
+                    new Point(lastCell.Position.X - 1, lastCell.Position.Y),
                     new Point(lastCell.Position.X, lastCell.Position.Y + 1),
-                    new Point(lastCell.Position.X - 1, lastCell.Position.Y)
+                    new Point(lastCell.Position.X + 1, lastCell.Position.Y),
+                    new Point(lastCell.Position.X, lastCell.Position.Y - 1)
                 };
                 
                 //checking neighbors cell
