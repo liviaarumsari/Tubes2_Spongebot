@@ -282,7 +282,7 @@ namespace Spongebot
                     RouteLabel.Content = bfs.finalRoute;
                     NodesLabel.Content = bfs.visitedNodes;
                     StepsLabel.Content = bfs.totalSteps;
-                    ExecutionTimeLabel.Content = watch.ElapsedMilliseconds + " ms";
+                    ExecutionTimeLabel.Content =(double) bfs.executionTime.ElapsedTicks/Stopwatch.Frequency *1000 + " ms";
                 }
                 // DFS Algorithm
                 else
@@ -304,7 +304,7 @@ namespace Spongebot
                     RouteLabel.Content = DFS.finalRoute;
                     NodesLabel.Content = DFS.visitedNodes;
                     StepsLabel.Content = DFS.totalSteps;
-                    ExecutionTimeLabel.Content = watch.ElapsedMilliseconds + " ms";
+                    ExecutionTimeLabel.Content = (double)DFS.executionTime.ElapsedTicks/Stopwatch.Frequency *1000 + " ms";
                 }
                 resultOutput.Visibility = Visibility.Visible;
             }

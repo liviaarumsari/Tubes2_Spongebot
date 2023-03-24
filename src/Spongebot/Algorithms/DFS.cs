@@ -16,6 +16,8 @@ namespace Spongebot.Algorithms
         public string finalRoute = new String("");
         public int visitedNodes;
         public int totalSteps ;
+        public Stopwatch executionTime = new System.Diagnostics.Stopwatch();
+
 
         const int finalPathIntervalTime = 300;
         public DFS(Board board)
@@ -68,11 +70,10 @@ namespace Spongebot.Algorithms
         public async Task run(bool isTSP, double timeInterval)
         {
             board.clearColors();
-
+            executionTime = Stopwatch.StartNew();
             this.visitedNodes = 0;
             this.totalSteps = 0;
             this.finalRoute = "";
-
             Stack<MazePath> pathS = new Stack<MazePath>();
             MazePath initialPath = new MazePath(startCell);
             pathS.Push(initialPath);
@@ -83,10 +84,12 @@ namespace Spongebot.Algorithms
                 MazePath currentPath = pathS.Pop(); //processing top of stack
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
+                executionTime.Stop();
                 currentPath.clearColor();
                 currentPath.stepColor();
                 lastCell.stepPathVisitingColor();
                 await Task.Delay(TimeSpan.FromMilliseconds(timeInterval));
+                executionTime.Start();
 
                 if (currentPath.treasureCount == treasureCells.Count)
                 {
@@ -97,7 +100,8 @@ namespace Spongebot.Algorithms
                         s += " - ";
                     }
                     s+=route(currentPath[currentPath.Length-2], currentPath[currentPath.Length-1]);
-                    
+
+                    executionTime.Stop();
                     board.clearColors();
                     for (int i = 0; i < currentPath.Length; i++)
                         {
@@ -108,14 +112,17 @@ namespace Spongebot.Algorithms
                     this.finalRoute = s;
                     this.totalSteps = currentPath.Length-1;
                     this.visitedNodes += countVisit;
-
+                    executionTime.Start();
                     if (isTSP){
                         MazePath tspPath = new MazePath(TSP(currentPath[currentPath.Length - 1]));
+                        executionTime.Stop();
                         for (int i = 0; i < tspPath.Length; i++){
                             tspPath[i].finalPathVisitedColor();
                             await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
                         }
+                        executionTime.Start();
                     }
+                    executionTime.Stop();
                     return;
                 }
 

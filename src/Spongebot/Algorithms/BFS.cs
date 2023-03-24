@@ -16,7 +16,7 @@ namespace Spongebot.Algorithms
         public string finalRoute = new String("");
         public int visitedNodes;
         public int totalSteps;
-
+        public Stopwatch executionTime = new System.Diagnostics.Stopwatch();
         const int finalPathIntervalTime = 300;
 
         public BFS(Board board)
@@ -77,6 +77,7 @@ namespace Spongebot.Algorithms
         public async Task runNonTSP(double timeInterval)
         {
             board.clearColors();
+            executionTime = Stopwatch.StartNew();
 
             MazePath initialPath = new MazePath(startCell);
             List<MazePath> completePath = new List<MazePath>();
@@ -95,6 +96,7 @@ namespace Spongebot.Algorithms
                 Cell lastCell = currentPath[currentPath.Length - 1];
                 this.visitedNodes++;
 
+                executionTime.Stop();
                 foreach (var path in completePath)
                 {
                     path.stepColor();
@@ -106,6 +108,7 @@ namespace Spongebot.Algorithms
 
                 board.clearColors();
 
+                executionTime.Start();
                 if (unvisitedTreasure.Contains(lastCell))
                 {
                     completePath.Add(currentPath);
@@ -122,8 +125,10 @@ namespace Spongebot.Algorithms
                     {
                         for (int i = 0; i < path.Length; i++)
                         {
+                            executionTime.Stop();
                             path[i].finalPathVisitedColor();
                             await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
+                            executionTime.Start();
                             this.totalSteps++;
 
                             if (i == 0 && previousLastCell != null)
@@ -141,6 +146,7 @@ namespace Spongebot.Algorithms
                         }
                         previousLastCell = path[path.Length - 1];
                     }
+                    executionTime.Stop();
                     return;
                 }
 
@@ -167,6 +173,7 @@ namespace Spongebot.Algorithms
         {
             board.clearColors();
 
+            executionTime = Stopwatch.StartNew();
             MazePath initialPath = new MazePath(startCell);
             List<MazePath> completePath = new List<MazePath>();
             HashSet<Cell> unvisitedTreasure = new HashSet<Cell>(treasureCells);
@@ -184,6 +191,7 @@ namespace Spongebot.Algorithms
                 Cell lastCell = currentPath[currentPath.Length - 1];
                 this.visitedNodes++;
 
+                executionTime.Stop();
                 foreach (var path in completePath)
                 {
                     path.stepColor();
@@ -195,6 +203,7 @@ namespace Spongebot.Algorithms
 
                 board.clearColors();
 
+                executionTime.Start();
                 if (unvisitedTreasure.Contains(lastCell) ||
                     (unvisitedTreasure.Count == 0 && lastCell.Type == CellType.Start))
                 {
@@ -212,8 +221,10 @@ namespace Spongebot.Algorithms
                     {
                         for (int i = 0; i < path.Length; i++)
                         {
+                            executionTime.Stop();
                             path[i].finalPathVisitedColor();
                             await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
+                            executionTime.Start();
                             this.totalSteps++;
 
                             if (i == 0 && previousLastCell != null)
@@ -231,6 +242,7 @@ namespace Spongebot.Algorithms
                         }
                         previousLastCell = path[path.Length - 1];
                     }
+                    executionTime.Stop();
                     return;
                 }
 
