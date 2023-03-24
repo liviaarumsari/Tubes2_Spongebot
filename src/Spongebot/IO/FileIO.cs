@@ -24,6 +24,8 @@ class FileIO
         this.fileName = _filename;
         if (!File.Exists(_filePath))
             throw new FileNotFoundException("\"" + fileName + "\" was not found.");
+        if (Path.GetExtension(_filePath) != ".txt")
+            throw new InvalidFileFormatException("\"" + fileName + "\" is not a .txt.");
         this.filePath = _filePath;
     }
 
