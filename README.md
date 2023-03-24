@@ -4,7 +4,7 @@
 ## **Table of Contents**
 * [General Information](#general-information)
 * [Requirements](#requirements)
-* [How to Run and Compile (Windows)](#how-to-run-and-compile-windows)
+* [How to Run and Build (Windows)](#how-to-run-and-compile-windows)
 * [Screenshot](#screenshot)
 * [Program Structure](#program-structure)
 * [Author](#author)
@@ -24,28 +24,43 @@ In this repository, the solution to find the treasure(s) in mazae problem is imp
 ## **Requirements**
 To use this program, you will need to install **.Net** (https://dotnet.microsoft.com/en-us/download) on the device you are using. You will also need **Visual Studio** (https://visualstudio.microsoft.com/) to be installed before running the program.
 
-## **How to Run and Compile (Windows)**
+## **How to Run and Build (Windows)**
 ### **Setup**
 1. Clone this repository <br>
 ```sh 
 $ git clone https://github.com/liviaarumsari/Tubes2_Spongebot
 ```
 2. Open this repository in terminal
-### **Compile (optional)**
+### **Build (optional)**
+1. Change your directory to the project directory 
+```sh 
+$ cd src/Spongebot
+```
+2. Build the solution
+```sh 
+$ dotnet build
+```
+3. Your build result will be in the 'bin' folder
 
 ### **Run**
+You can directly open Spongebot.exe from 'bin' folder or you can follow these steps:
+
 1. Change the directory to the 'bin' folder <br>
 ```sh 
 $ cd bin
 ```
-
+2. Run the application using this command
+```sh 
+$ dotnet Spongebot.dll
+```
 
 
 ## **Screenshot**
 
-<img src="doc/home1.jpg"> 
-<img src="doc/home2.jpg"> 
-<img src="doc/fig.jpg"> 
+<img src="doc/fig1.png" width="752" />
+<img src="doc/fig2.png" width="752" />
+<img src="doc/fig3.png" width="752" />
+<img src="doc/fig4.png" width="752" />
 
 
 ## **Program Structure**
@@ -53,34 +68,77 @@ $ cd bin
 .
 │   .gitignore
 │   README.md
-|
+│
 ├───bin
-|   └───main.exe
-|
+│       Spongebot.deps.json
+│       Spongebot.dll
+│       Spongebot.exe
+│       Spongebot.pdb
+│       Spongebot.runtimeconfig.json
+│
 ├───doc
-|   └───Tubes2_K2_13521094_Spongebot.pdf
-|
-├───test
-|   └───board1.txt
-|       board2.txt
-|       board3.txt
-|
-└───src/Spongebot
-     |
-     └───Algorithms
-          └───BFS.cs
-              DFS.cs
-         Enums
-          └───CellType.cs
-         Exceptions
-          └───Exceptions.cs
-         IO
-          └───FileIO.cs
-         Objects
-          └───Board.cs
-              Cell.cs
-              MazePath.cs
-              Point.cs 
+│       fig1.png
+│       fig2.png
+│       fig3.png
+│       fig4.png
+│       Tubes2_K2_13521094_Spongebot.pdf
+│
+├───src
+│   └───Spongebot
+│       │   App.xaml
+│       │   App.xaml.cs
+│       │   AssemblyInfo.cs
+│       │   MainWindow.xaml
+│       │   MainWindow.xaml.cs
+│       │   Spongebot.csproj
+│       │   Spongebot.csproj.user
+│       │   Spongebot.sln
+│       │
+│       ├───Algorithms
+│       │       BFS.cs
+│       │       DFS.cs
+│       │
+│       ├───Enums
+│       │       CellType.cs
+│       │
+│       ├───Exceptions
+│       │       Exceptions.cs
+│       │
+│       ├───Fonts
+│       │       Lato-Black.ttf
+│       │       Lato-Bold.ttf
+│       │       Lato-Regular.ttf
+│       │
+│       ├───Images
+│       │       chooseFileImg.png
+│       │       logoImg.ico
+│       │       logoImg.png
+│       │       searchImg.png
+│       │       startImg.png
+│       │       treasureImg.png
+│       │
+│       ├───IO
+│       │       FileIO.cs
+│       │
+│       ├───Objects
+│       │       Board.cs
+│       │       Cell.cs
+│       │       MazePath.cs
+│       │       Point.cs
+│       │
+│       └───Properties
+│               Resources.Designer.cs
+│               Resources.resx
+│
+└───test
+        sampel-1.txt
+        sampel-2.txt
+        sampel-3.txt
+        sampel-4.txt
+        sampel-5.txt
+        sampel-6.txt
+        sampel-7.txt
+        sampel-8.txt
 
 ```
 
