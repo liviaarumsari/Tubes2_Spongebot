@@ -18,7 +18,6 @@ namespace Spongebot.Algorithms
         public int totalSteps ;
 
         const int finalPathIntervalTime = 300;
-
         public DFS(Board board)
         {
             this.board = board;
@@ -81,7 +80,7 @@ namespace Spongebot.Algorithms
             bool deadend = true;
             int countVisit = 1;
             while (pathS.Count != 0){
-                MazePath currentPath = pathS.Pop();
+                MazePath currentPath = pathS.Pop(); //processing top of stack
                 Cell lastCell = currentPath[currentPath.Length - 1];
 
                 currentPath.clearColor();
@@ -91,9 +90,8 @@ namespace Spongebot.Algorithms
 
                 if (currentPath.treasureCount == treasureCells.Count)
                 {
-                    string s = new String("");
-
-                    
+                    //initialize string route
+                    string s = new String("");                    
                     for (int i = 0; i < currentPath.Length - 2;i++){
                         s += route(currentPath[i], currentPath[i + 1]);
                         s += "-";
@@ -110,20 +108,13 @@ namespace Spongebot.Algorithms
                     this.finalRoute = s;
                     this.totalSteps = currentPath.Length-1;
                     this.visitedNodes += countVisit;
-                    Debug.WriteLine("route: "+this.finalRoute);
-                    Debug.WriteLine("steps: "+this.totalSteps);
-                    Debug.WriteLine("node: "+this.visitedNodes);
-                    if (isTSP)
-                    {
+
+                    if (isTSP){
                         MazePath tspPath = new MazePath(TSP(currentPath[currentPath.Length - 1]));
-                        for (int i = 0; i < tspPath.Length; i++)
-                        {
-                        tspPath[i].finalPathVisitedColor();
-                        await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
-                    }
-                    Debug.WriteLine("route after: "+this.finalRoute);
-                    Debug.WriteLine("steps after: "+this.totalSteps);
-                    Debug.WriteLine("node after: "+this.visitedNodes);
+                        for (int i = 0; i < tspPath.Length; i++){
+                            tspPath[i].finalPathVisitedColor();
+                            await Task.Delay(TimeSpan.FromMilliseconds(finalPathIntervalTime));
+                        }
                     }
                     return;
                 }
@@ -178,8 +169,6 @@ namespace Spongebot.Algorithms
                         s += "-";
                     }
                     s+=route(currentPath[currentPath.Length-2], currentPath[currentPath.Length-1]);
-                    Debug.WriteLine("route back: "+s);
-                    Debug.WriteLine("step back: "+(currentPath.Length-1));
                     this.finalRoute += s;
                     this.totalSteps += currentPath.Length - 1;
                     break;
