@@ -54,7 +54,7 @@
   </ItemGroup>
 	
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="for /r &quot;$(TargetDir)&quot; %25%25f in (*.dll, *.exe, *.json, *.pdb) do @xcopy &quot;%25%25f&quot; &quot;..\..\bin&quot;" />
+      <Exec Command="for /r &quot;$(TargetDir)&quot; %25%25f in (*.dll, *.exe, *.json, *.pdb) do @copy &quot;%25%25f&quot; &quot;..\..\bin&quot;" />
     </Target>
 
 </Project>
