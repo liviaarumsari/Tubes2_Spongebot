@@ -141,6 +141,7 @@ namespace Spongebot.Algorithms
                         }
                         previousLastCell = path[path.Length - 1];
                     }
+                    this.totalSteps--;
                     return;
                 }
 
@@ -231,6 +232,7 @@ namespace Spongebot.Algorithms
                         }
                         previousLastCell = path[path.Length - 1];
                     }
+                    this.totalSteps--;
                     return;
                 }
 
